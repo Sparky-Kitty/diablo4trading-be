@@ -2,25 +2,15 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from './config/database.config';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DiabloItemAffixModule } from './diabloItems/diablo-item-affix.module';
+import { DiabloItemModule } from './diabloItems/diablo-item.module';
 import { TradeModule } from './trade/trade.module';
+import { DatabaseModule } from './database.module';
 
 @Module({
   imports: [
-    AuthModule, 
-    DiabloItemAffixModule,
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // Import the ConfigModule for using the ConfigService
-      inject: [ConfigService], // Inject the ConfigService into the factory function
-      useFactory: async (configService: ConfigService) => {
-        await ConfigModule.envVariablesLoaded;
-        return typeOrmConfig(configService);
-      }
-    }),
-    ConfigModule.forRoot(),
+    DatabaseModule,
+    AuthModule,
+    DiabloItemModule,
     TradeModule
   ],
   controllers: [AppController],

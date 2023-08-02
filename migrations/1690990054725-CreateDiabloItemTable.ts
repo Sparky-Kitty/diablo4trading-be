@@ -8,7 +8,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'integer',
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
@@ -18,7 +18,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
             type: 'uuid',
             isNullable: false,
             generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()', // If using PostgreSQL, this line generates UUIDs by default
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'name',
@@ -27,7 +27,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
           },
           {
             name: 'power',
-            type: 'int',
+            type: 'integer',
             isNullable: true,
           },
           {
@@ -42,17 +42,17 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
           },
           {
             name: 'dps',
-            type: 'int',
+            type: 'integer',
             isNullable: true,
           },
           {
             name: 'armor',
-            type: 'int',
+            type: 'integer',
             isNullable: true,
           },
           {
             name: 'socketCount',
-            type: 'int',
+            type: 'integer',
             isNullable: true,
           },
           {
@@ -62,7 +62,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
           },
           {
             name: 'requiredLevel',
-            type: 'int',
+            type: 'integer',
             isNullable: true,
           },
           {
@@ -70,39 +70,23 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
             type: 'varchar',
             isNullable: true,
           },
-          ...Array.from({ length: 8 }, (_, index) => {
-            const affixId = `affix${index}Id`;
-            const affixAttribute0Value = `affix${index}Attribute0Value`;
-            const affixAttribute1Value = `affix${index}Attribute1Value`;
-            const affixAttribute2Value = `affix${index}Attribute2Value`;
+          ...Array.from({ length: 6 }, (_, index) => {
+            const affixIdKey = `${index < 2 ? 'inherentA' : 'a'}ffix${index < 2 ? index : index - 2}Id`;
+            const affixValueKey = `${index < 2 ? 'inherentA' : 'a'}ffix${index < 2 ? index : index - 2}Value`;
 
             const columns: TableColumnOptions[] = [
               {
-                name: affixId,
-                type: 'int',
+                name: affixIdKey,
+                type: 'integer',
                 isNullable: true,
               },
               {
-                name: affixAttribute0Value,
+                name: affixValueKey,
                 type: 'decimal',
                 precision: 6,
                 scale: 2,
                 isNullable: true,
-              },
-              {
-                name: affixAttribute1Value,
-                type: 'decimal',
-                precision: 6,
-                scale: 2,
-                isNullable: true,
-              },
-              {
-                name: affixAttribute2Value,
-                type: 'decimal',
-                precision: 6,
-                scale: 2,
-                isNullable: true,
-              },
+              }
             ];
 
             return columns;

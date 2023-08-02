@@ -6,7 +6,7 @@ import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionO
 
 type SupportedConnectionOptions = MysqlConnectionOptions | SqliteConnectionOptions;
 type SupportedConnectionTypes = 'mysql' | 'mariadb' | 'sqlite'
-type SharedConnectionOptions = 'type' | 'database' | 'entities' | 'synchronize' | 'migrations'
+type SharedConnectionOptions = 'type' | 'database' | 'entities' | 'synchronize' | 'migrations' | 'logging'
 const DatabaseTypes: { [key: string]: SupportedConnectionTypes } = {
   Sqlite: 'sqlite',
   Mysql: 'mysql'
@@ -31,6 +31,7 @@ export const typeOrmConfig = (configService?: ConfigService): DataSourceOptions 
     synchronize: false,
     migrations: [__dirname + '/../../migrations/*.{js,ts}'],
     database: configService.get<string>('DATABASE_NAME'),
+    logging: isDevelopment
   }
 
   switch (type) {

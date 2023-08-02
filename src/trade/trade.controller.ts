@@ -4,9 +4,7 @@ import { generateMockDiabloItems } from '../diabloItems/diablo-item.mock';
 import { API } from '@sanctuaryteam/shared';
 import { Game } from '@diablosnaps/common';
 import { DiabloItem } from 'src/diabloItems/diablo-item.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DiabloItemAffix } from 'src/diabloItems/diablo-item-affix.entity';
-import { Repository } from 'typeorm';
+import { DiabloItemService } from 'src/diabloItems/diablo-item.service';
 
 export interface SearchRequest {
   payload: API.SearchPayload;
@@ -32,13 +30,12 @@ export class TradeController implements OnModuleInit {
   private diabloItemsMock: DiabloItem[] = [];
 
   constructor(
-    @InjectRepository(DiabloItemAffix)
-    private diabloItemAffixRepository: Repository<DiabloItemAffix>,
+    private diabloItemService: DiabloItemService,
   ) {
   }
 
   async onModuleInit() {
-    const diabloItemAffixes = await this.diabloItemAffixRepository.find();
+    const diabloItemAffixes = await this.diabloItemService.getAffixes();
     this.diabloItemsMock = generateMockDiabloItems(500, diabloItemAffixes);
   }
 
@@ -48,7 +45,7 @@ export class TradeController implements OnModuleInit {
 
     // You can implement the actual search logic here based on the request
     // For now, we'll use mock data
-    const startIndex = (page - 1) * 10;
+    const startIndex = (page ?? 1 - 1) * 10;
     const endIndex = startIndex + 10;
     console.log(startIndex, endIndex)
     const paginatedResults: DiabloItem[] = this.diabloItemsMock.slice(startIndex, endIndex);

@@ -1,12 +1,11 @@
 
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DiabloItem } from 'src/diabloItems/diablo-item.entity';
-import { DiabloItemAffix } from 'src/diabloItems/diablo-item-affix.entity';
 import { TradeController } from './trade.controller';
+import { DiabloItemModule } from 'src/diabloItems/diablo-item.module';
+import { DiabloItemService } from 'src/diabloItems/diablo-item.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DiabloItem, DiabloItemAffix])],
-  controllers: [TradeController],
+  imports: [DiabloItemModule],
+  controllers: [TradeController]
 })
 export class TradeModule {}

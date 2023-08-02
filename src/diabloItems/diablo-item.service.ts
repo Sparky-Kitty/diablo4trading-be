@@ -5,18 +5,18 @@ import { DiabloItemAffix } from './diablo-item-affix.entity';
 import { Assets } from '@diablosnaps/assets';
 
 @Injectable()
-export class DiabloItemAffixService implements OnModuleInit {
+export class DiabloItemService implements OnModuleInit {
     constructor(
-        @InjectRepository(DiabloItemAffix)
+        @InjectRepository(DiabloItemAffix, 'memory')
         private readonly diabloItemAffixRepository: Repository<DiabloItemAffix>,
     ) { }
 
     async onModuleInit() {
-        await this.populateDatabase();
+        await this.loadAffixes();
     }
 
-    async populateDatabase() {
-        // Read the affix.json file
+    async loadAffixes() {
+        // Read the affix data
         const affixData = (await Assets.loadAffixes()).definitions;
 
         // Get the repository for DiabloItemAffix entity
@@ -28,5 +28,9 @@ export class DiabloItemAffixService implements OnModuleInit {
             affix.name = name;
             await diabloItemAffixRepository.save(affix);
         }
+    }
+
+    async getAffixes() {
+        return this.diabloItemAffixRepository.find();
     }
 }
