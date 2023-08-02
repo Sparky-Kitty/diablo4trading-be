@@ -6,13 +6,13 @@ export class User {
   id: number;
 
   @Column()
+  discordId: string;
+
+  @Column()
   discordName: string;
 
   @Column()
   battleNetTag: string;
-
-  @Column()
-  username: string;
 
   @Column()
   email: string;

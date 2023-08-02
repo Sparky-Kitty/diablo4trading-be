@@ -4,6 +4,8 @@ services:
   backend-api:
     # Use the image built from the Dockerfile in the current directory
     image: node:latest
+    env_file:
+      - .env
     # Specify the working directory inside the container
     working_dir: /app
     # Mount the current directory into the container for live code editing

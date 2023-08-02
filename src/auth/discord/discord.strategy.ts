@@ -48,17 +48,15 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       return null;
     }
 
-    const userInformation = {
-      discordName: profile.id,
-      username: profile.username,
+    const userInformation: Partial<User> = {
+      discordName: profile.username,
+      discordId: profile.id,
       email: profile.email,
       battleNetTag
       // Add other relevant properties you want to store or use for your application.
     };
 
     const user = await this.usersService.findOrCreateUser(userInformation);
-
-    this.logger.debug(request, inspect(user));
 
     const token = this.jwtService.sign({ user });
     

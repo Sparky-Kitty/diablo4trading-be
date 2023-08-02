@@ -1,6 +1,16 @@
 import { DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config as dotenvConfig } from 'dotenv';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+
+type SupportedConnectionOptions = MysqlConnectionOptions | SqliteConnectionOptions;
+type SupportedConnectionTypes = 'mysql' | 'mariadb' | 'sqlite'
+type SharedConnectionOptions = 'type' | 'database' | 'entities' | 'synchronize' | 'migrations'
+const DatabaseTypes: { [key: string]: SupportedConnectionTypes } = {
+  Sqlite: 'sqlite',
+  Mysql: 'mysql'
+}
 
 export const typeOrmConfig = (configService?: ConfigService): DataSourceOptions => {
   let typeOrmOptions: DataSourceOptions;
@@ -12,33 +22,32 @@ export const typeOrmConfig = (configService?: ConfigService): DataSourceOptions 
     } as ConfigService;
   }
 
-  const databaseType = configService.get<string>('DATABASE_TYPE');
+  const type = configService.get<SupportedConnectionTypes>('DATABASE_TYPE');
   const isDevelopment = configService.get<string>('NODE_ENV') === 'development';
 
- 
+  const defaultOptions: Required<Pick<SupportedConnectionOptions, SharedConnectionOptions>> = {
+    type,
+    entities: [__dirname + '/../**/*.entity.{js,ts}'],
+    synchronize: false,
+    migrations: [__dirname + '/../../migrations/*.{js,ts}'],
+    database: configService.get<string>('DATABASE_NAME'),
+  }
 
-  if (isDevelopment && databaseType === 'sqlite') {
-    typeOrmOptions = {
-      type: 'sqlite',
-      database: configService.get<string>('DATABASE_FILE'),
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
-      synchronize: false,
-      migrations: [__dirname + '/../../migrations/*.{js,ts}']
-    };
-  } else if (!isDevelopment && databaseType === 'mysql') {
-    typeOrmOptions = {
-      type: 'mysql',
-      host: configService.get<string>('DATABASE_HOST'),
-      port: configService.get<number>('DATABASE_PORT'),
-      username: configService.get<string>('DATABASE_USERNAME'),
-      password: configService.get<string>('DATABASE_PASSWORD'),
-      database: configService.get<string>('DATABASE_NAME'),
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
-      synchronize: false,
-      migrations: [__dirname + '/../../migrations/*.{js,ts}']
-    };
-  } else {
-    throw new Error('Invalid DATABASE_TYPE or NODE_ENV configuration.');
+  switch (type) {
+    case DatabaseTypes.Sqlite:
+      typeOrmOptions = defaultOptions;
+      break;
+    case DatabaseTypes.Mysql:
+      typeOrmOptions = {
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        ...defaultOptions
+      };
+      break;
+    default:
+      throw new Error('Invalid DATABASE_TYPE configuration.');
   }
 
   return typeOrmOptions;

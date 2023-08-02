@@ -11,21 +11,21 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) { }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { username } });
+  async findOne(discordId: string): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { discordId } });
   }
 
   async findOrCreateUser(profile: Partial<User>): Promise<User> {
-    const { discordName, username, email, battleNetTag } = profile;
+    const { discordName, discordId, email, battleNetTag } = profile;
 
     // Check if the user already exists based on Discord ID
-    let user = await this.userRepository.findOne({ where: { discordName } });
+    let user = await this.userRepository.findOne({ where: { discordId } });
 
     if (!user) {
       // If the user doesn't exist, create a new user with the provided information
       user = this.userRepository.create({
         discordName,
-        username,
+        discordId,
         email,
         battleNetTag, // Add other relevant properties here
       });

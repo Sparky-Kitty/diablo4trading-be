@@ -23,18 +23,6 @@ export class AuthController {
   @Get('discord/callback')
   @UseGuards(DiscordAuthGuard)
   async callback(@Request() req: RequestModel) {
-    return { token: req.token };
+    return { user: req.user, token: req.token };
   }
-
-  @Get('status')
-  @UseGuards(JwtAuthGuard)
-  async status(@Request() req: RequestModel) {
-    return req.user;
-  }
-
-  @Get('logout')
-  @UseGuards(JwtAuthGuard)
-  async logout(@Request() req: RequestModel) {
-    // this.jwtService.
-  }  
 }
