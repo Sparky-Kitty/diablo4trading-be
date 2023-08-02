@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend-api:
+    # Use the image built from the Dockerfile in the current directory
+    image: node:latest
+    # Specify the working directory inside the container
+    working_dir: /app
+    # Mount the current directory into the container for live code editing
+    volumes:
+      - .:/app
+    # Expose the development server port (if needed)
+    ports:
+      - '3000:3000'
+    # Install and run the development server using Yarn
+    command:
+      - sh
+      - -c
+      - |
+        yarn install
+        yarn start:dev
