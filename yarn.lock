@@ -889,10 +889,10 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@sanctuaryteam/shared@^0.1.1":
-  version "0.1.2"
-  resolved "https://npm.pkg.github.com/download/@sanctuaryteam/shared/0.1.2/446ebffb753cb2aaed055435435064532a384875#446ebffb753cb2aaed055435435064532a384875"
-  integrity sha512-mLU2BIcUDs8uqY7IRKEHqHrxPTSL3jq0yY2WjVgRep+nOXK9ovFiIRHA45Gp+lJ/yNJ5wKn/TJqGLSF0haHH7g==
+"@sanctuaryteam/shared@^0.1.4":
+  version "0.1.4"
+  resolved "https://npm.pkg.github.com/download/@sanctuaryteam/shared/0.1.4/4798cf23abf93ab9b3ef3744406248debe367395#4798cf23abf93ab9b3ef3744406248debe367395"
+  integrity sha512-C4WaZ9xjwt3uM2Y9M/9NuXTu0q4QUddHFCnegt0sh07fJB8kCCTITVLHlmAsuORY2i8HoH8XNEw2tUg1304WKA==
   dependencies:
     "@diablosnaps/common" "^0.2.5"
 
