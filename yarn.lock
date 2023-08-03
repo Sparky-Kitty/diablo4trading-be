@@ -889,12 +889,13 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@sanctuaryteam/shared@^0.1.6":
-  version "0.1.6"
-  resolved "https://npm.pkg.github.com/download/@sanctuaryteam/shared/0.1.6/a6160bfd38100dc5b513cd4f0b62dd60ccb50e57#a6160bfd38100dc5b513cd4f0b62dd60ccb50e57"
-  integrity sha512-A2uNRx/+Is6BDA0uadMwd5wjFaATmmTFFPT5jx4CLVhz6HWQBUvFo4xPsn6FTKRGcp+MvrvlWVjx3YSahv9ibQ==
+"@sanctuaryteam/shared@^0.2.0":
+  version "0.2.0"
+  resolved "https://npm.pkg.github.com/download/@sanctuaryteam/shared/0.2.0/afcef274a96acb0c2bc6893d06b6e434ee444d20#afcef274a96acb0c2bc6893d06b6e434ee444d20"
+  integrity sha512-b6nv3RvRklOfpWJYDTLtMVYz/sUdKB321vaV/P2FNxKa0HyJKEKGlwKXX18JaCksi/W01nwFWA82Xl/UcNUkEw==
   dependencies:
     "@diablosnaps/common" "^0.2.5"
+    lz-string "^1.5.0"
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
@@ -3858,6 +3859,11 @@ lru-cache@^6.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.0.tgz#b9e2a6a72a129d81ab317202d93c7691df727e61"
   integrity sha512-svTf/fzsKHffP42sujkO/Rjs37BCIsQVRCeNYIm9WN8rgT7ffoUnRtZCqU+6BqcSBdv8gwJeTz8knJpgACeQMw==
+
+lz-string@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.5.0.tgz#c1ab50f77887b712621201ba9fd4e3a6ed099941"
+  integrity sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==
 
 macos-release@^2.5.0:
   version "2.5.1"
