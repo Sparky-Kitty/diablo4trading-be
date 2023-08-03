@@ -1,8 +1,8 @@
 // diablo-item.mock.ts
 import { Game } from '@diablosnaps/common';
-import { DiabloItem } from './diablo-item.interface';
-import { DiabloItemAffix } from './diablo-item-affix.interface';
 import { faker } from '@faker-js/faker';
+import { DiabloItemAffix } from './diablo-item-affix.interface';
+import { DiabloItem } from './diablo-item.interface';
 
 // Function to generate random DiabloItem mock data
 export function generateMockDiabloItems(count: number, diabloItemAffixes: DiabloItemAffix[]): DiabloItem[] {
@@ -12,7 +12,7 @@ export function generateMockDiabloItems(count: number, diabloItemAffixes: Diablo
         const item: DiabloItem = {
             id: i + 1,
             uuid: faker.string.uuid(),
-            quality: faker.helpers.arrayElement(Object.values(Game.ItemQuality)),
+            quality: faker.helpers.arrayElement([Game.ItemQuality.Common, Game.ItemQuality.Magic, Game.ItemQuality.Rare]),
             variant: faker.helpers.arrayElement(Object.values(Game.ItemVariant)),
             name: faker.lorem.words(2),
             power: faker.number.int({ min: 100, max: 1000 }),
