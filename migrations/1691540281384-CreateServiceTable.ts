@@ -4,6 +4,7 @@ import {
   Table,
   TableForeignKey,
 } from 'typeorm';
+
 export class CreateServiceTable1691540281384 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -19,7 +20,7 @@ export class CreateServiceTable1691540281384 implements MigrationInterface {
           },
           {
             name: 'realm_type',
-            type: 'integer',
+            type: 'varchar',
             isNullable: false,
           },
           {
@@ -39,6 +40,18 @@ export class CreateServiceTable1691540281384 implements MigrationInterface {
             name: 'user_id',
             type: 'integer',
             isNullable: true,
+          },
+          {
+            name: 'max_slots',
+            type: 'integer',
+            default: 3,
+            isNullable: false,
+          },
+          {
+            name: 'available_slots',
+            default: 3,
+            type: 'integer',
+            isNullable: false,
           },
           {
             name: 'tags',
