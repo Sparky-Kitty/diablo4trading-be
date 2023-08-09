@@ -1,6 +1,6 @@
 // trade.controller.ts
-import { Controller, Get, Query } from '@nestjs/common';
 import { Game } from '@diablosnaps/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { SearchPayload } from '@sanctuaryteam/shared/cjs/api/search';
 import { DiabloItem } from 'src/diabloItems/diablo-item.entity';
 
@@ -27,25 +27,25 @@ const diabloItemsMock = [];
 
 @Controller('trade')
 export class TradeController {
-  @Get('search')
-  search(@Query() request: SearchPageRequest): SearchResponse {
-    const { payload, serverType, timestamp, page } = request;
+    @Get('search')
+    search(@Query() request: SearchPageRequest): SearchResponse {
+        const { payload, serverType, timestamp, page } = request;
 
-    // You can implement the actual search logic here based on the request
-    // For now, we'll use mock data
-    const startIndex = (page - 1) * 10;
-    const endIndex = startIndex + 10;
-    const paginatedResults: DiabloItem[] = diabloItemsMock.slice(startIndex, endIndex);
+        // You can implement the actual search logic here based on the request
+        // For now, we'll use mock data
+        const startIndex = (page - 1) * 10;
+        const endIndex = startIndex + 10;
+        const paginatedResults: DiabloItem[] = diabloItemsMock.slice(startIndex, endIndex);
 
-    const response: SearchPageResponse = {
-      results: paginatedResults,
-    };
+        const response: SearchPageResponse = {
+            results: paginatedResults,
+        };
 
-    const total = diabloItemsMock.length;
-    return {
-      total,
-      timestamp,
-      ...response,
-    };
-  }
+        const total = diabloItemsMock.length;
+        return {
+            total,
+            timestamp,
+            ...response,
+        };
+    }
 }
