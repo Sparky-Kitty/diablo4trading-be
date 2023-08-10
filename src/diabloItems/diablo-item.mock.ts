@@ -12,7 +12,11 @@ export function generateMockDiabloItems(count: number, diabloItemAffixes: Diablo
         const item: DiabloItem = {
             id: i + 1,
             uuid: faker.string.uuid(),
-            quality: faker.helpers.arrayElement([Game.ItemQuality.Common, Game.ItemQuality.Magic, Game.ItemQuality.Rare]),
+            quality: faker.helpers.arrayElement([
+                Game.ItemQuality.Common,
+                Game.ItemQuality.Magic,
+                Game.ItemQuality.Rare,
+            ]),
             variant: faker.helpers.arrayElement(Object.values(Game.ItemVariant)),
             name: faker.lorem.words(2),
             power: faker.number.int({ min: 100, max: 1000 }),

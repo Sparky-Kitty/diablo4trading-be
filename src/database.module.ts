@@ -1,10 +1,8 @@
-
-
 // database.module.ts
 
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/database.config';
 import { DiabloItemAffix } from './diabloItems/diablo-item-affix.entity';
 
@@ -18,8 +16,8 @@ import { DiabloItemAffix } from './diabloItems/diablo-item-affix.entity';
                 database: ':memory:',
                 entities: [DiabloItemAffix],
                 synchronize: true,
-                logging: false
-            })
+                logging: false,
+            }),
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule], // Import the ConfigModule for using the ConfigService
@@ -28,11 +26,11 @@ import { DiabloItemAffix } from './diabloItems/diablo-item-affix.entity';
             useFactory: async (configService: ConfigService) => {
                 await ConfigModule.envVariablesLoaded;
                 return typeOrmConfig(configService);
-            }
+            },
         }),
     ],
-    exports: [TypeOrmModule]
+    exports: [TypeOrmModule],
 })
 export class DatabaseModule {
-    constructor() { }
+    constructor() {}
 }
