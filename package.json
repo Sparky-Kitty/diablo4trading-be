@@ -83,7 +83,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-    "prettier": {
-        "printWidth": 999
-    }
+  "prettier": {
+    "printWidth": 999
+  }
 }
