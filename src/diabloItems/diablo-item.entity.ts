@@ -2,7 +2,7 @@ import { Game } from '@diablosnaps/common';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { DiabloItemAffix } from './diablo-item-affix.entity';
 
-@Entity({ name: 'diabloItem' })
+@Entity({ name: 'diablo_item' })
 export class DiabloItem {
     @PrimaryGeneratedColumn()
     id: number;
@@ -44,49 +44,49 @@ export class DiabloItem {
     classRestriction: Game.Class;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'inherentAffix0Id' })
+    @JoinColumn({ name: 'inherent_affix0_id' })
     inherentAffix0: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     inherentAffix0Value: number;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'inherentAffix1Id' })
+    @JoinColumn({ name: 'inherent_affix1_id' })
     inherentAffix1: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     inherentAffix1Value: number;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'affix0Id' })
+    @JoinColumn({ name: 'affix0_id' })
     affix0: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     affix0Value: number;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'affix1Id' })
+    @JoinColumn({ name: 'affix1_id' })
     affix1: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     affix1Value: number;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'affix2Id' })
+    @JoinColumn({ name: 'affix2_id' })
     affix2: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     affix2Value: number;
 
     @ManyToOne(() => DiabloItemAffix, { nullable: true })
-    @JoinColumn({ name: 'affix3Id' })
+    @JoinColumn({ name: 'affix3_id' })
     affix3: DiabloItemAffix;
 
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
     affix3Value: number;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-    createdDate: Date;
+    createdAt: Date;
 
     @Column({ type: 'boolean', default: false })
     deleted: boolean;

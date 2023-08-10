@@ -8,7 +8,6 @@ module.exports = {
     plugins: ['@typescript-eslint/eslint-plugin'],
     extends: [
         'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended',
     ],
     root: true,
     env: {
@@ -21,5 +20,25 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        // PK - just to copy some prettier rules
+        'indent': [
+            'error',
+            4,
+            {
+                'SwitchCase': 1,
+                'ignoredNodes': [
+                    'PropertyDefinition',
+                ],
+            },
+        ],
+        '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
+        '@typescript-eslint/quotes': [
+            'error',
+            'single',
+            {
+                'avoidEscape': true,
+                'allowTemplateLiterals': true,
+            },
+        ],
     },
 };

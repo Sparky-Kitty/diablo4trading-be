@@ -14,17 +14,17 @@ export class CreateUserTable1690411047852 implements MigrationInterface {
                         generationStrategy: 'increment',
                     },
                     {
-                        name: 'discordId',
+                        name: 'discord_id',
                         type: 'varchar',
                         isNullable: false,
                     },
                     {
-                        name: 'discordName',
+                        name: 'discord_name',
                         type: 'varchar',
                         isNullable: false,
                     },
                     {
-                        name: 'battleNetTag',
+                        name: 'battle_net_tag',
                         type: 'varchar',
                         isNullable: false,
                     },

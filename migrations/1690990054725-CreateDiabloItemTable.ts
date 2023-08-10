@@ -1,10 +1,10 @@
-import { MigrationInterface, QueryRunner, Table, TableColumn, TableColumnOptions, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableColumnOptions } from 'typeorm';
 
 export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'diabloItem',
+                name: 'diablo_item',
                 columns: [
                     {
                         name: 'id',
@@ -31,7 +31,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: 'powerType',
+                        name: 'power_type',
                         type: 'varchar',
                         isNullable: true,
                     },
@@ -51,30 +51,30 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
                         isNullable: true,
                     },
                     {
-                        name: 'socketCount',
+                        name: 'socket_count',
                         type: 'integer',
                         isNullable: true,
                     },
                     {
-                        name: 'seasonalAffix',
+                        name: 'seasonal_affix',
                         type: 'varchar',
                         isNullable: true,
                     },
                     {
-                        name: 'requiredLevel',
+                        name: 'required_level',
                         type: 'integer',
                         isNullable: true,
                     },
                     {
-                        name: 'classRequirement',
+                        name: 'class_requirement',
                         type: 'varchar',
                         isNullable: true,
                     },
                     ...Array.from({ length: 6 }, (_, index) => {
-                        const affixIdKey = `${index < 2 ? 'inherentA' : 'a'}ffix${index < 2 ? index : index - 2}Id`;
-                        const affixValueKey = `${index < 2 ? 'inherentA' : 'a'}ffix${
+                        const affixIdKey = `${index < 2 ? 'inherent_a' : 'a'}ffix${index < 2 ? index : index - 2}_id`;
+                        const affixValueKey = `${index < 2 ? 'inherent_a' : 'a'}ffix${
                             index < 2 ? index : index - 2
-                        }Value`;
+                        }_value`;
 
                         const columns: TableColumnOptions[] = [
                             {
@@ -94,7 +94,7 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
                         return columns;
                     }).flat(),
                     {
-                        name: 'createdDate',
+                        name: 'created_at',
                         type: 'timestamp',
                         default: 'CURRENT_TIMESTAMP',
                     },
@@ -110,6 +110,6 @@ export class CreateDiabloItemTable1690990054725 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('diabloItem');
+        await queryRunner.dropTable('diablo_item');
     }
 }

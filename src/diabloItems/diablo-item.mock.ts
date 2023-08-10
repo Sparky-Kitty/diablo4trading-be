@@ -39,7 +39,7 @@ export function generateMockDiabloItems(count: number, diabloItemAffixes: Diablo
             affix2Value: faker.number.int({ min: 1, max: 100 }), // Adjust as needed
             affix3: faker.helpers.arrayElement(diabloItemAffixes),
             affix3Value: faker.number.int({ min: 1, max: 100 }), // Adjust as needed
-            createdDate: faker.date.past(),
+            createdAt: faker.date.past(),
             deleted: false,
         };
 

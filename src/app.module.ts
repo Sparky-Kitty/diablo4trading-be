@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database.module';
 import { DiabloItemModule } from './diabloItems/diablo-item.module';
+import { ServicesModule } from './services/services.module';
 import { TradeModule } from './trade/trade.module';
 
 @Module({
@@ -12,6 +13,7 @@ import { TradeModule } from './trade/trade.module';
         AuthModule,
         DiabloItemModule,
         TradeModule,
+        ServicesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -27,6 +27,6 @@ export interface DiabloItem {
     affix2Value: number | null;
     affix3: DiabloItemAffix | null;
     affix3Value: number | null;
-    createdDate: Date;
+    createdAt: Date;
     deleted: boolean;
 }
