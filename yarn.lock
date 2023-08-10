@@ -388,6 +388,36 @@
   resolved "https://registry.yarnpkg.com/@diablosnaps/common/-/common-0.2.5.tgz#d8d4ca95ca814308ff418f1a082efa18608fba41"
   integrity sha512-OBylbmRaZDF2OAS9Tcw2dZiGPvuYLDpmubP1KCyIWXZ+Hu9DRJt9bLGkj0hyMa26dsu4UHjQXWZIrK8N6oyEag==
 
+"@dprint/darwin-arm64@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/darwin-arm64/-/darwin-arm64-0.40.2.tgz#b77535c3e0d3e6c15eafe4db290f42f1c456da4a"
+  integrity sha512-qharMFhxpNq9brgvHLbqzzAgVgPWSHLfzNLwWWhKcGOUUDUIilfAo3SlvOz6w4nQiIifLpYZOvZqK7Lpf9mSSw==
+
+"@dprint/darwin-x64@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/darwin-x64/-/darwin-x64-0.40.2.tgz#06fe3f4ed700ea6ef617ebd199269ef4371b9dfa"
+  integrity sha512-FPDdOTVr1JfqtLBTCvqlihWslTy3LBUoi3H1gaqIazCKMj2dB9voFWkBiMT+REMHDrlVsoSpFAfsliNr/y7HPA==
+
+"@dprint/linux-arm64-glibc@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/linux-arm64-glibc/-/linux-arm64-glibc-0.40.2.tgz#417ca4baa4be2fb0ff717188c48512b96435cd86"
+  integrity sha512-GmUWfKwEwXA+onvewX9hEJSMcd9V184+uRbEhI5tG28tBP9+IjQhrY7jCjxPvaZA+EvzNPnAy5D1wbJdlNLBNA==
+
+"@dprint/linux-x64-glibc@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/linux-x64-glibc/-/linux-x64-glibc-0.40.2.tgz#fbb3c2e881452e26ac230c0c1a6a818edb68a862"
+  integrity sha512-vMHAHdsOY+2thieSWbIrIioDfPgvipwUgd0MZUWOqycTrXU6kLyi2B+5J/2Jc+QO3CiLIbumQd2FH/0vB1eWqA==
+
+"@dprint/linux-x64-musl@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/linux-x64-musl/-/linux-x64-musl-0.40.2.tgz#af6cbc6487cd0dc87d5401991f1be4b0d16e7629"
+  integrity sha512-nFSbDWd9ORyOhJ7a+RmE39WbuPoQ3OQutIgfAmfikiu/wENzEwxxv4QJ7aFnBaoZb0wuVEEpXShr8vY4p0exkg==
+
+"@dprint/win32-x64@0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@dprint/win32-x64/-/win32-x64-0.40.2.tgz#42b7763a73e91bf95b62b0e90bca49c7b193bb4e"
+  integrity sha512-qF4VCQzFTZYD61lbQqXLU/IwUTbLK22CancO+uVtXmZRoKU9GaVjcBhMUB7URxsa8rvxWHhHT6ldillI/aOWCg==
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"
@@ -2286,6 +2316,18 @@ dotenv@^16.0.3:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
   integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
+
+dprint@^0.40.2:
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/dprint/-/dprint-0.40.2.tgz#63fc61bdb53af66a97481d9f8103185cb447b466"
+  integrity sha512-3LdyUV0itEW59UPtsRA2StOWOu8FyOW+BgvJpH/tACRHKi0z5gaQnvSxdS3mbG7dgtEhdRnGg6JoiQyGib6NTg==
+  optionalDependencies:
+    "@dprint/darwin-arm64" "0.40.2"
+    "@dprint/darwin-x64" "0.40.2"
+    "@dprint/linux-arm64-glibc" "0.40.2"
+    "@dprint/linux-x64-glibc" "0.40.2"
+    "@dprint/linux-x64-musl" "0.40.2"
+    "@dprint/win32-x64" "0.40.2"
 
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"
@@ -4551,11 +4593,6 @@ prettier-linter-helpers@^1.0.0:
   integrity sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==
   dependencies:
     fast-diff "^1.1.2"
-
-prettier@^2.8.8:
-  version "2.8.8"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
-  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
 pretty-format@^29.0.0, pretty-format@^29.6.2:
   version "29.6.2"

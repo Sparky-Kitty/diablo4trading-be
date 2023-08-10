@@ -1,15 +1,16 @@
+import { Assets } from '@diablosnaps/assets';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DiabloItemAffix } from './diablo-item-affix.entity';
-import { Assets } from '@diablosnaps/assets';
 
 @Injectable()
 export class DiabloItemService implements OnModuleInit {
     constructor(
-        @InjectRepository(DiabloItemAffix, 'memory')
-        private readonly diabloItemAffixRepository: Repository<DiabloItemAffix>,
-    ) { }
+        @InjectRepository(DiabloItemAffix, 'memory') private readonly diabloItemAffixRepository: Repository<
+            DiabloItemAffix
+        >,
+    ) {}
 
     async onModuleInit() {
         await this.loadAffixes();

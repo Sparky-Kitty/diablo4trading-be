@@ -1,4 +1,4 @@
 export interface DiabloItemAffix {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 }

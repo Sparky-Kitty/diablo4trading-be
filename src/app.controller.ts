@@ -3,15 +3,15 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+    constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+    @Get()
+    getHello(): string {
+        return this.appService.getHello();
+    }
 
-  @Get('environment')
-  getEnvironment(): string {
-    return JSON.stringify(process.env.NODE_ENV);
-  }
+    @Get('environment')
+    getEnvironment(): string {
+        return JSON.stringify(process.env.NODE_ENV);
+    }
 }
