@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate": "yarn run build && typeorm migration:run -d dist/src/config/typeorm.config.js",
+    "migrate": "yarn run build && yarn run migrate:run",
+    "migrate:run": "typeorm migration:run -d dist/src/config/typeorm.config.js",
     "generate-jwt-token": "node -e \"require('fs').writeFileSync('.env', require('fs').readFileSync('.env', 'utf8').replace(/JWT_SECRET=.*/, 'JWT_SECRET=' + Array.from({length: 8}, () => Math.random().toString(36).slice(2)).join('')), 'utf8')\""
   },
   "dependencies": {
