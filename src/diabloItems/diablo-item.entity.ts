@@ -2,92 +2,92 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 't
 import { DiabloItemAffix } from './diablo-item-affix.entity';
 import { Game } from '@diablosnaps/common';
 
-@Entity({ name: 'diabloItem' })
+@Entity({ name: 'diablo_item' })
 export class DiabloItem {
   @PrimaryGeneratedColumn()
-  id: number;
+    id: number;
 
   @Column({ type: 'uuid', nullable: false, default: 'uuid_generate_v4()' })
-  uuid: string;
+    uuid: string;
 
   @Column({ nullable: true })
-  quality: Game.ItemQuality;
+    quality: Game.ItemQuality;
 
   @Column({ nullable: true })
-  variant: Game.ItemVariant;
+    variant: Game.ItemVariant;
 
   @Column({ nullable: true })
-  name: string;
+    name: string;
 
   @Column({ nullable: true })
-  power: number;
+    power: number;
 
   @Column({ nullable: true })
-  type: Game.ItemType;
+    type: Game.ItemType;
 
   @Column({ nullable: true })
-  dps: number;
+    dps: number;
 
   @Column({ nullable: true })
-  armor: number;
+    armor: number;
 
   @Column({ nullable: true })
-  socketCount: number;
+    socketCount: number;
 
   @Column({ nullable: true })
-  socketType: Game.ItemSocketType;
+    socketType: Game.ItemSocketType;
 
   @Column({ nullable: true })
-  requiredLevel: number;
+    requiredLevel: number;
 
   @Column({ nullable: true })
-  classRestriction: Game.Class;
+    classRestriction: Game.Class;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'inherentAffix0Id' })
-  inherentAffix0: DiabloItemAffix;
+  @JoinColumn({ name: 'inherent_affix0_id' })
+    inherentAffix0: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  inherentAffix0Value: number;
+    inherentAffix0Value: number;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'inherentAffix1Id' })
-  inherentAffix1: DiabloItemAffix;
+  @JoinColumn({ name: 'inherent_affix1_id' })
+    inherentAffix1: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  inherentAffix1Value: number;
+    inherentAffix1Value: number;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'affix0Id' })
-  affix0: DiabloItemAffix;
+  @JoinColumn({ name: 'affix0_id' })
+    affix0: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  affix0Value: number;
+    affix0Value: number;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'affix1Id' })
-  affix1: DiabloItemAffix;
+  @JoinColumn({ name: 'affix1_id' })
+    affix1: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  affix1Value: number;
+    affix1Value: number;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'affix2Id' })
-  affix2: DiabloItemAffix;
+  @JoinColumn({ name: 'affix2_id' })
+    affix2: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  affix2Value: number;
+    affix2Value: number;
 
   @ManyToOne(() => DiabloItemAffix, { nullable: true })
-  @JoinColumn({ name: 'affix3Id' })
-  affix3: DiabloItemAffix;
+  @JoinColumn({ name: 'affix3_id' })
+    affix3: DiabloItemAffix;
 
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: true })
-  affix3Value: number;
+    affix3Value: number;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-  createdDate: Date;
+    createdAt: Date;
 
   @Column({ type: 'boolean', default: false })
-  deleted: boolean;
+    deleted: boolean;
 }

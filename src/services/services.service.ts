@@ -2,6 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Service } from './services.entity';
+import { ServiceResponseException } from '../common/exceptions';
+
+// Minutes
+const MIN_BUMP_INTERVAL = 30;
+
+export enum SERVICE_ERROR_CODES {
+    SERVICE_NOT_FOUND = 'SERVICE_NOT_FOUND',
+    BUMP_TOO_SOON = 'BUMP_TOO_SOON',
+}
 
 @Injectable()
 export class ServicesService {
@@ -32,7 +41,7 @@ export class ServicesService {
   async updateService(id: number, dto: Partial<Service>): Promise<Service> {
     const existingService = await this.serviceRepository.findOneBy({ id });
     if (!existingService) {
-      throw new Error(`Service with ID ${id} not found`);
+      throw new ServiceResponseException(SERVICE_ERROR_CODES.SERVICE_NOT_FOUND,`Service with ID ${id} not found`);
     }
 
     await this.serviceRepository.update(id, dto);
@@ -54,15 +63,15 @@ export class ServicesService {
   async bumpService(id: number): Promise<void> {
     const service = await this.serviceRepository.findOne({ where: { id } });
     if (!service) {
-      throw new Error('Service not found');
+      throw new ServiceResponseException(SERVICE_ERROR_CODES.SERVICE_NOT_FOUND,`Service with ID ${id} not found`);
     }
 
-    const halfHourAgo = new Date(Date.now() - 30 * 60 * 1000);
-    if (service.bumped_at > halfHourAgo) {
-      throw new Error('Service was bumped less than 30 minutes ago');
+    const nextBumpAvailableTime = new Date(Date.now() - MIN_BUMP_INTERVAL * 60 * 1000);
+    if (service.bumpedAt > nextBumpAvailableTime) {
+      throw new ServiceResponseException(SERVICE_ERROR_CODES.BUMP_TOO_SOON, `Service was bumped less than ${MIN_BUMP_INTERVAL} minutes ago`);
     }
 
-    await this.serviceRepository.update(id, { bumped_at: new Date() });
+    await this.serviceRepository.update(id, { bumpedAt: new Date() });
   }
 }
 
@@ -83,14 +92,12 @@ class CustomQueryBuilder {
     return this;
   }
 
-  searchByTags(tags?: number[]): CustomQueryBuilder {
-    if (tags && tags.length > 0) {
-      for (const tag of tags) {
-        this.queryBuilder = this.queryBuilder.orWhere(
-          `(service.tags & :tag) = :tag`,
-          { tag },
-        );
-      }
+  searchByTags(tags?: number): CustomQueryBuilder {
+    if (typeof tags === 'number') {
+      this.queryBuilder = this.queryBuilder.orWhere(
+        `(service.tags & :tags) = :tags`,
+        { tags },
+      );
     }
     return this;
   }
