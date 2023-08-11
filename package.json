@@ -34,7 +34,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.0",
     "@sanctuaryteam/shared": "^0.2.0",
-    "mysql": "npm:mysql2@^3.6.0",
+    "mysql2": "^3.6.0",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4",
     "passport-jwt": "^4.0.1",
