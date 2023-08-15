@@ -1,10 +1,8 @@
-
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { jwtConstants } from '../constants';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'src/users/users.entity';
-
+import { jwtConstants } from '../constants';
 
 interface JwtPayload {
     iat: number; // Issued at (UNIX timestamp)

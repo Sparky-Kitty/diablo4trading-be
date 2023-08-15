@@ -2,19 +2,19 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  discordName: string;
+    @Column()
+    discordId: string;
 
-  @Column()
-  battleNetTag: string;
+    @Column()
+    discordName: string;
 
-  @Column()
-  username: string;
+    @Column()
+    battleNetTag: string;
 
-  @Column()
-  email: string;
-  // Add other columns or properties as needed.
+    @Column()
+    email: string;
+    // Add other columns or properties as needed.
 }
