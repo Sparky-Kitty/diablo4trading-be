@@ -2,7 +2,10 @@
 
 diablo4.trading backend application
 
-## Installation
+## Windows Installation
+Follow this setup guide - [Windows Setup Instructions](https://github.com/SanctuaryTeam/.github/blob/main/profile/SETUP.md)
+
+## Unix Installation
 
 ```bash
 $ yarn install
