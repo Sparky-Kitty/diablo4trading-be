@@ -1,98 +1,103 @@
-## Description
+# Diablo Trading Backend (sanctuaryteam/diablotrading-be)
 
-diablo4.trading backend application
+This repository contains the backend application for the Diablo Trading project. It provides the necessary services to support the trading functionality.
 
-## Windows Installation
-Follow this setup guide - [Windows Setup Instructions](https://github.com/SanctuaryTeam/.github/wiki/WindowsSetUp)
+## Environment Vars
+- Create a [new GitHub personal access token](https://github.com/settings/tokens/new) with the following scopes:
+```
+    read:packages
+```
 
-## Running the Application with Docker
+- Update .env File:  run `cp .env.example .env` to create a new .env file. Update the new .env file with SANCTUARYTEAM_AUTH_TOKEN=YOUR_NEW_TOKEN
+
+## Docker
+Install the project dependencies and start up:
 
 To get your application up and running:
 - Ensure you have both Docker and Docker Compose installed.
-- Navigate to the directory containing your docker-compose.yml file.
-- Run the following command: `docker-compose up`
-- Access your application in your browser at http://localhost:3000.
-
-## Development
-start: Starts the application in development mode.
+- Navigate to `~/sanctuaryteam/diablo4trading-be` containing your docker-compose.yml file.
 ```bash
-$ yarn run start
+$ cd ~/sanctuaryteam/diablo4trading-be
 ```
+- Run the following command: `docker compose up`
+- packages will be installed and application will start
+- Access the Application: Once the containers are up and running, you can access the application in your browser using the URL: http://localhost:3000.
 
-start:dev: Starts the application in development mode with watch enabled.
-```bash
-$ yarn run start:dev
-```
+## SQLite Build and Run Migrations:
+SQLite Database (Development)
 
-start:prod: Starts the application in production mode.
+For development, the application uses SQLite as the database. If you need to perform migrations on SQLite, you can use the following command:
+
 ```bash
-$ yarn run start:prod
+
+$ yarn migrate
 ```
 
-dev: Starts the Vite development server.
+#### Run Migrations:
+
 ```bash
-$ yarn run dev
+$ yarn migrate:run
 ```
 
-preview: Previews the production build using Vite.
+## Generate JWT Token
+To generate a new JWT secret token for your application:
+
 ```bash
-$ yarn run preview
+$ yarn generate-jwt-token
 ```
 
-tsc: Runs TypeScript compiler (tsc) without emitting any files.
+## Script Usage
+
+To run the application, you can use the following scripts:
+
+#### Development Mode:
 ```bash
-$ yarn run tsc
+$ yarn start:dev
 ```
 
-## Translation
+#### Debug Mode:
 
-lingui:extract:  Extracts translations with LinguiJS, and removes obsolete translations.
 ```bash
-$ yarn run lingui:extract
-```
 
-lingui:compile: Compiles translations with LinguiJS and outputs TypeScript files.
-```bash
-$ yarn run lingui:compile
+$ yarn start:debug
 ```
 
-## Build & Deployment
-prebuild: Compiles translations before building.
+#### Production Mode:
+
 ```bash
-$ yarn run prebuild
+
+$ yarn start:prod
 ```
-build: Compiles TypeScript and then builds the project using Vite.
-```bash
-$ yarn run build
-```
-## Code Quality (Linting & Formatting)
-lint: Lints TypeScript files with ESLint.
-```bash
-$ yarn run lint
-```
-format: Formats the code using dprint.
-```bash
-$ yarn run format
-```
+
 ## Testing
-test: Runs both unit and UI tests.
+
+For testing, we have the following scripts:
+
+#### Run All Tests:
+
 ```bash
-$ yarn run test
+$ yarn test
 ```
 
-test:unit: Runs unit tests with Jest using a specific configuration.
+#### Run Tests with Watch Mode:
+
 ```bash
-$ yarn run test:unit
-```
-test:ui: Runs UI tests with Jest using a specific configuration.
-```bash
-$ yarn run test:ui
-```
-test:coverage: Runs unit tests with Jest, generating coverage information.
-```bash
-$ yarn run test:coverage
+
+$ yarn test:watch
 ```
 
-## License
+#### Generate Test Coverage Reports:
+
+```bash
+$ yarn test:cov
+```
+
+#### Run End-to-End Tests:
+
+```bash
+$ yarn test:e2e
+```
+
+# License
 
 Nest is [MIT licensed](LICENSE).
