@@ -2,7 +2,8 @@
 
 This repository contains the backend application for the Diablo Trading project. It provides the necessary services to support the trading functionality.
 
-## Environment Vars
+## Set Up .env
+Docker will user this file for project specific environment variables
 - Create a [new GitHub personal access token](https://github.com/settings/tokens/new) with the following scopes:
 ```
     read:packages
