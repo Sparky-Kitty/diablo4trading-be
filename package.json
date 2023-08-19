@@ -87,6 +87,8 @@
     "testEnvironment": "node"
   },
   "prettier": {
-    "printWidth": 999
+    "printWidth": 999,
+    "singleQuote": true,
+    "tabWidth": 4
   }
 }
