@@ -31,15 +31,23 @@ export class ServicesController {
 
     @Get('')
     async search(
+        @Query('serverType') serverType?: string,
         @Query('title') title?: string,
         @Query('tags', OptionalParseIntPipe) tags?: number,
+        @Query('userId', OptionalParseIntPipe) userId?: number,
+        @Query('deleted') deleted?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<Service[]> {
         return await this.servicesService
             .createQuery()
+            .withUser()
+            .searchByRealmType(serverType)
             .searchByTitle(title)
             .searchByTags(tags)
+            .searchByUserId(userId)
+            .searchByDeleted(deleted === true)
+            .includeSlots()
             .paginate(offset, limit)
             .orderBy('bumpedAt', 'DESC')
             .getMany();
