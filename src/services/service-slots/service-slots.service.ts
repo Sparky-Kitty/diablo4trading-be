@@ -168,6 +168,21 @@ class CustomQueryBuilder {
         return this;
     }
 
+    includeService(): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.leftJoinAndSelect('service_slot.service', 'service');
+        return this;
+    }
+
+    includeOwner(): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.leftJoinAndSelect('service_slot.serviceOwner', 'serviceOwner');
+        return this;
+    }
+
+    includeClient(): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.leftJoinAndSelect('service_slot.client', 'client');
+        return this;
+    }
+
     paginate(offset?: number, limit?: number): CustomQueryBuilder {
         if (typeof offset === 'number') {
             this.queryBuilder = this.queryBuilder.skip(offset);
