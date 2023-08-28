@@ -46,7 +46,7 @@ export class ServicesController {
             .searchByTitle(title)
             .searchByTags(tags)
             .searchByUserId(userId)
-            .searchByDeleted(deleted === 'true')
+            .searchByDeleted(deleted === true)
             .includeSlots()
             .paginate(offset, limit)
             .orderBy('bumpedAt', 'DESC')
