@@ -87,14 +87,29 @@ class CustomQueryBuilder {
         this.queryBuilder = queryBuilder;
     }
 
+    withUser(): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.innerJoinAndSelect('service.user', 'user');
+        return this;
+    }
+
     searchById(id: number): CustomQueryBuilder {
         this.queryBuilder = this.queryBuilder.andWhere('service.id = :id', { id });
         return this;
     }
 
+    searchByRealmType(serverType?: string): CustomQueryBuilder {
+        if (serverType) {
+            this.queryBuilder = this.queryBuilder.andWhere(
+                'service.realmType = :serverType',
+                { serverType },
+            );
+        }
+        return this;
+    }
+
     searchByTitle(title?: string): CustomQueryBuilder {
         if (title) {
-            this.queryBuilder = this.queryBuilder.andWhere(
+            this.queryBuilder = this.queryBuilder.orWhere(
                 'service.title LIKE :title',
                 { title: `%${title}%` },
             );
@@ -104,11 +119,29 @@ class CustomQueryBuilder {
 
     searchByTags(tags?: number): CustomQueryBuilder {
         if (typeof tags === 'number') {
-            this.queryBuilder = this.queryBuilder.orWhere(
+            this.queryBuilder = this.queryBuilder.andWhere(
                 `(service.tags & :tags) = :tags`,
                 { tags },
             );
         }
+        return this;
+    }
+
+    searchByUserId(userId?: number): CustomQueryBuilder {
+        if (typeof userId === 'number') {
+            this.queryBuilder = this.queryBuilder.andWhere(
+                `service.userId = :userId`,
+                { userId },
+            );
+        }
+        return this;
+    }
+
+    searchByDeleted(deleted?: boolean): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.andWhere(
+            `service.deleted = :deleted`,
+            { deleted },
+        );
         return this;
     }
 
@@ -141,12 +174,5 @@ class CustomQueryBuilder {
 
     getOne(): Promise<Service> {
         return this.queryBuilder.getOne();
-    }
-
-    searchByDeleted(deleted?: boolean): CustomQueryBuilder {
-        this.queryBuilder = this.queryBuilder.andWhere(
-            `service.deleted = :deleted`,
-            { deleted },
-        );        return this;
     }
 }

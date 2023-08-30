@@ -38,6 +38,9 @@ export class ServiceSlotsController {
             .searchByServiceOwner(ownerId)
             .searchBySlotClient(clientId)
             .searchByState(state)
+            .includeService()
+            .includeClient()
+            .includeOwner()
             .paginate(offset, limit)
             .orderBy('createdAt', 'DESC')
             .getMany();
