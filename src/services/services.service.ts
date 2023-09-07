@@ -4,7 +4,7 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../common/exceptions';
 import { User } from '../users/users.entity';
 import { Service } from './services.entity';
-import { ServiceDto } from './service.dto';
+
 // Minutes
 const MIN_BUMP_INTERVAL = 30;
 
@@ -30,12 +30,12 @@ export class ServicesService {
         return await this.serviceRepository.count({ where: { deleted: false, userId: user.id } });
     }
 
-    async createService(data: Partial<Service>): Promise<ServiceDto> {
+    async createService(data: Partial<Service>): Promise<Service> {
         const service = this.serviceRepository.create(data);
-        return await this.serviceRepository.save(service) as ServiceDto;
+        return await this.serviceRepository.save(service);
     }
 
-    async updateService(id: number, dto: Partial<Service>): Promise<ServiceDto> {
+    async updateService(id: number, dto: Partial<Service>): Promise<Service> {
         const existingService = await this.serviceRepository.findOneBy({ id });
         if (!existingService) {
             throw new ServiceResponseException(
@@ -45,22 +45,23 @@ export class ServicesService {
         }
 
         await this.serviceRepository.update(id, dto);
-        return await this.serviceRepository.findOneBy({ id }) as ServiceDto;
+        return await this.serviceRepository.findOneBy({ id });
     }
 
     async deleteService(id: number): Promise<void> {
         await this.serviceRepository.delete(id);
     }
 
-    async softDeleteService(id: number): Promise<void> {
+    async softDeleteService(id: number): Promise<Service> {
         await this.serviceRepository.update(id, { deleted: true });
+        return await this.serviceRepository.findOneBy({ id });
     }
 
     async undoSoftDeleteService(id: number): Promise<void> {
         await this.serviceRepository.update(id, { deleted: false });
     }
 
-    async bumpService(id: number): Promise<void> {
+    async bumpService(id: number): Promise<Service> {
         const service = await this.serviceRepository.findOne({ where: { id } });
         if (!service) {
             throw new ServiceResponseException(
@@ -78,6 +79,7 @@ export class ServicesService {
         }
 
         await this.serviceRepository.update(id, { bumpedAt: new Date() });
+        return await this.serviceRepository.findOneBy({ id });
     }
 }
 

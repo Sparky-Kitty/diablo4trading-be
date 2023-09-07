@@ -73,7 +73,8 @@ export class ServicesController {
 
         dto.user = req.user;
 
-        return await this.servicesService.createService(dto);
+        return await this.servicesService.createService(dto)
+        .then(service => ServiceDto.fromEntity(service));
     }
 
     @Put(':id')
@@ -92,7 +93,8 @@ export class ServicesController {
         }
 
         try {
-            return await this.servicesService.updateService(id, updateDto);
+            return await this.servicesService.updateService(id, updateDto)
+            .then(service => ServiceDto.fromEntity(service));
         } catch (error) {
             throw new HttpException(
                 error?.message || 'Unknown error',
@@ -107,8 +109,9 @@ export class ServicesController {
     }
 
     @Delete(':id/soft-delete')
-    async softDelete(@Param('id') id: number): Promise<void> {
-        await this.servicesService.softDeleteService(id);
+    async softDelete(@Param('id') id: number): Promise<ServiceDto> {
+        return await this.servicesService.softDeleteService(id)
+        .then(service => ServiceDto.fromEntity(service));
     }
 
     @Put(':id/undo-soft-delete')
@@ -117,9 +120,10 @@ export class ServicesController {
     }
 
     @Post(':id/bump')
-    async bumpService(@Param('id') id: number): Promise<void> {
+    async bumpService(@Param('id') id: number): Promise<ServiceDto> {
         try {
-            await this.servicesService.bumpService(id);
+            return await this.servicesService.bumpService(id)
+            .then(service => ServiceDto.fromEntity(service));
         } catch (error) {
             if (error?.code === SERVICE_ERROR_CODES.BUMP_TOO_SOON) {
                 throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
