@@ -62,7 +62,7 @@ export class ServicesController {
 
     @Post('')
     @UseGuards(JwtAuthGuard)
-    async create(@Body() dto: Partial<Service>, @Request() req: RequestModel): Promise<Service> {
+    async create(@Body() dto: Partial<Service>, @Request() req: RequestModel): Promise<ServiceDto> {
         const user = req.user;
 
         const notDeletedServicesCount = await this.servicesService.countNotDeletedServices(user);
@@ -80,7 +80,7 @@ export class ServicesController {
     async update(
         @Param('id') id: number,
         @Body() updateDto: Partial<Service>,
-    ): Promise<Service> {
+    ): Promise<ServiceDto> {
         const existingService = await this.servicesService
             .createQuery()
             .includeSlots()

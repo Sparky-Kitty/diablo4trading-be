@@ -4,6 +4,7 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../common/exceptions';
 import { User } from '../users/users.entity';
 import { Service } from './services.entity';
+import { ServiceDto } from './service.dto';
 // Minutes
 const MIN_BUMP_INTERVAL = 30;
 
@@ -29,12 +30,12 @@ export class ServicesService {
         return await this.serviceRepository.count({ where: { deleted: false, userId: user.id } });
     }
 
-    async createService(data: Partial<Service>): Promise<Service> {
+    async createService(data: Partial<Service>): Promise<ServiceDto> {
         const service = this.serviceRepository.create(data);
-        return await this.serviceRepository.save(service);
+        return await this.serviceRepository.save(service) as ServiceDto;
     }
 
-    async updateService(id: number, dto: Partial<Service>): Promise<Service> {
+    async updateService(id: number, dto: Partial<Service>): Promise<ServiceDto> {
         const existingService = await this.serviceRepository.findOneBy({ id });
         if (!existingService) {
             throw new ServiceResponseException(
@@ -44,7 +45,7 @@ export class ServicesService {
         }
 
         await this.serviceRepository.update(id, dto);
-        return await this.serviceRepository.findOneBy({ id });
+        return await this.serviceRepository.findOneBy({ id }) as ServiceDto;
     }
 
     async deleteService(id: number): Promise<void> {
