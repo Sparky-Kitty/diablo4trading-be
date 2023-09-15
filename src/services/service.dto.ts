@@ -23,7 +23,7 @@ export class ServiceDto implements IService {
         const dto = new ServiceDto();
         dto.id = entity.id;
         dto.realmType = entity.realmType;
-        dto.title = entity.title;
+        dto.title = `[${entity.realmType}] ${entity.title}`;
         dto.content = entity.content;
         dto.userId = entity.userId;
         dto.tags = entity.tags;

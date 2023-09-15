@@ -8,50 +8,56 @@ import {
     Param,
     Put,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { API } from '@sanctuaryteam/shared';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
 import { ServiceSlot } from './service-slots.entity';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { ServiceSlotDto } from './service-slots.dto';
+import { SkipGuards } from 'src/auth/skip-guards.decorator';
 
 const STATE_TRANSITIONS_MAP = {
     [API.ServiceSlotStates.Pending]: [API.ServiceSlotStates.Accepted, API.ServiceSlotStates.Rejected],
     [API.ServiceSlotStates.Accepted]: [API.ServiceSlotStates.Ended],
 };
 
+@UseGuards(JwtAuthGuard)
 @Controller('service-slots')
 export class ServiceSlotsController {
     constructor(private readonly serviceSlotsService: ServiceSlotsService) {
     }
 
+    @SkipGuards()
     @Get('')
     async search(
-        @Query('clientId', OptionalParseIntPipe) clientId?: number,
-        @Query('ownerId', OptionalParseIntPipe) ownerId?: number,
+        @Query('userId', OptionalParseIntPipe) userId?: number,
         @Query('state') state?: API.ServiceSlotStates,
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
-    ): Promise<ServiceSlot[]> {
+    ): Promise<ServiceSlotDto[]> {
+        console.log('here')
         return await this.serviceSlotsService
             .createQuery()
             .excludeEnded(excludeEnded === true)
-            .searchByServiceOwner(ownerId)
-            .searchBySlotClient(clientId)
+            .searchByUser(userId)
             .searchByState(state)
             .includeService()
             .includeClient()
             .includeOwner()
             .paginate(offset, limit)
             .orderBy('createdAt', 'DESC')
-            .getMany();
+            .getMany()
+            .then((slots) => slots.map(slot => ServiceSlotDto.fromEntity(slot)));
     }
 
     @Put(':id/state/:newState')
     async updateState(
         @Param('id') id: number,
         @Param('newState') newState: API.ServiceSlotStates,
-    ): Promise<ServiceSlot> {
+    ): Promise<ServiceSlotDto> {
         const slot = await this.serviceSlotsService.findById(id);
 
         if (!slot) {
@@ -63,7 +69,8 @@ export class ServiceSlotsController {
         }
 
         try {
-            return await this.serviceSlotsService.updateServiceSlotState(id, newState);
+            return await this.serviceSlotsService.updateServiceSlotState(id, newState)
+            .then((slot) => ServiceSlotDto.fromEntity(slot));
         } catch (error) {
             // Check if error is a SERVICE_SLOT_ERROR_CODES
             if (error?.code && error.code in SERVICE_SLOT_ERROR_CODES) {

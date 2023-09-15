@@ -12,6 +12,9 @@ export class UserDto implements Partial<IUser> {
     vouchScore?: number;
     vouchRating?: number;
 
+    // Private name    
+    name?: string;
+
     static fromEntity(entity: User): UserDto {
         const dto = new UserDto();
         dto.discordName = entity.discordName;
@@ -23,6 +26,8 @@ export class UserDto implements Partial<IUser> {
             dto.vouchScore = 0;
             dto.vouchRating = 0;
         }
+
+        dto.name = entity.battleNetTag.split("#")[0];
 
         return dto;
     }

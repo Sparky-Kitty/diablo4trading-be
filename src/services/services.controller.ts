@@ -145,6 +145,7 @@ export class ServicesController {
         const existingService = await this.servicesService
             .createQuery()
             .searchById(id)
+            .searchByDeleted(false)
             .getOne();
 
         if (!existingService) {
