@@ -142,11 +142,12 @@ class CustomQueryBuilder {
 
     searchByUser(id: number): CustomQueryBuilder {
         if (typeof id === 'number') {
-            this.queryBuilder = this.queryBuilder.andWhere(new Brackets(queryBuilder => {
-                queryBuilder.where('service_slot.service_owner_user_id = :id', { id })
-                .orWhere('service_slot.client_user_id = :id', { id })
-                
-            }));
+            this.queryBuilder = this.queryBuilder.andWhere(
+                new Brackets(queryBuilder => {
+                    queryBuilder.where('service_slot.service_owner_user_id = :id', { id })
+                        .orWhere('service_slot.client_user_id = :id', { id });
+                }),
+            );
         }
         return this;
     }

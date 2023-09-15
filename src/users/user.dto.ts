@@ -12,7 +12,7 @@ export class UserDto implements Partial<IUser> {
     vouchScore?: number;
     vouchRating?: number;
 
-    // Private name    
+    // Private name
     name?: string;
 
     static fromEntity(entity: User): UserDto {
@@ -27,7 +27,7 @@ export class UserDto implements Partial<IUser> {
             dto.vouchRating = 0;
         }
 
-        dto.name = entity.battleNetTag.split("#")[0];
+        dto.name = entity.battleNetTag.split('#')[0];
 
         return dto;
     }

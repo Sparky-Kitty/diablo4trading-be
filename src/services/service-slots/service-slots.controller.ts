@@ -11,12 +11,12 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { API } from '@sanctuaryteam/shared';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
+import { ServiceSlotDto } from './service-slots.dto';
 import { ServiceSlot } from './service-slots.entity';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { ServiceSlotDto } from './service-slots.dto';
-import { SkipGuards } from 'src/auth/skip-guards.decorator';
 
 const STATE_TRANSITIONS_MAP = {
     [API.ServiceSlotStates.Pending]: [API.ServiceSlotStates.Accepted, API.ServiceSlotStates.Rejected],
@@ -38,7 +38,7 @@ export class ServiceSlotsController {
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<ServiceSlotDto[]> {
-        console.log('here')
+        console.log('here');
         return await this.serviceSlotsService
             .createQuery()
             .excludeEnded(excludeEnded === true)
@@ -70,7 +70,7 @@ export class ServiceSlotsController {
 
         try {
             return await this.serviceSlotsService.updateServiceSlotState(id, newState)
-            .then((slot) => ServiceSlotDto.fromEntity(slot));
+                .then((slot) => ServiceSlotDto.fromEntity(slot));
         } catch (error) {
             // Check if error is a SERVICE_SLOT_ERROR_CODES
             if (error?.code && error.code in SERVICE_SLOT_ERROR_CODES) {

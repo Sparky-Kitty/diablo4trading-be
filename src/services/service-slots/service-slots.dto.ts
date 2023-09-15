@@ -1,8 +1,8 @@
-import { UserDto } from '../../users/user.dto';
-import { IServiceSlot } from './service-slots.interface'; // Assuming you've named your interface IServiceSlot
 import { API } from '@sanctuaryteam/shared';
-import { ServiceSlot } from './service-slots.entity';
+import { UserDto } from '../../users/user.dto';
 import { ServiceDto } from '../service.dto';
+import { ServiceSlot } from './service-slots.entity';
+import { IServiceSlot } from './service-slots.interface'; // Assuming you've named your interface IServiceSlot
 
 export class ServiceSlotDto implements IServiceSlot {
     id: number;
