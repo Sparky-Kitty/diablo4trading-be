@@ -1,10 +1,10 @@
 import { API } from '@sanctuaryteam/shared';
-import { UserDto } from '../../users/user.dto';
-import { ServiceDto } from '../service.dto';
+import { UserDto, fromEntity as userDtoFromEntity } from '../../users/user.dto';
+import { ServiceDto, fromEntity as serviceDtoFromEntity } from '../service.dto';
 import { ServiceSlot } from './service-slots.entity';
 import { IServiceSlot } from './service-slots.interface'; // Assuming you've named your interface IServiceSlot
 
-export class ServiceSlotDto implements IServiceSlot {
+export interface ServiceSlotDto extends IServiceSlot {
     id: number;
     state: API.ServiceSlotStates;
     service: ServiceDto;
@@ -14,23 +14,27 @@ export class ServiceSlotDto implements IServiceSlot {
     client: UserDto;
     clientUserId: number;
     updatedAt: Date;
+}
 
-    static fromEntity(entity: ServiceSlot): ServiceSlotDto {
-        const dto = new ServiceSlotDto();
-        dto.id = entity.id;
-        dto.state = entity.state;
-        dto.service = ServiceDto.fromEntity(entity.service);
-        dto.serviceOwnerUserId = entity.serviceOwnerUserId;
-        dto.clientUserId = entity.clientUserId;
+export const fromEntity = (entity: ServiceSlot): ServiceSlotDto => {
+    const {
+        id, state, service, serviceId, serviceOwner, serviceOwnerUserId,
+        client, clientUserId, updatedAt
+    } = entity;
 
-        // Using UserDto.fromEntity to convert the client entity to UserDto
-        if (entity.client) {
-            dto.client = UserDto.fromEntity(entity.client);
-        }
-        if (entity.serviceOwner) {
-            dto.serviceOwner = UserDto.fromEntity(entity.serviceOwner);
-        }
+    const clientDto = client ? userDtoFromEntity(client, {hideDiscriminator: true}) : undefined;
+    const serviceOwnerDto = serviceOwner ? userDtoFromEntity(serviceOwner) : undefined;
+    const serviceDto = service ? serviceDtoFromEntity(service) : undefined;
 
-        return dto;
-    }
+    return {
+        id,
+        state,
+        updatedAt,
+        client: clientDto,
+        clientUserId,
+        serviceOwner: serviceOwnerDto,
+        serviceOwnerUserId,
+        service: serviceDto,
+        serviceId,
+    };
 }

@@ -14,7 +14,7 @@ import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
-import { ServiceSlotDto } from './service-slots.dto';
+import { ServiceSlotDto, fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { ServiceSlot } from './service-slots.entity';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
 
@@ -50,7 +50,7 @@ export class ServiceSlotsController {
             .paginate(offset, limit)
             .orderBy('createdAt', 'DESC')
             .getMany()
-            .then((slots) => slots.map(slot => ServiceSlotDto.fromEntity(slot)));
+            .then((slots) => slots.map(slot => serviceSlotDtoFromEntity(slot)));
     }
 
     @Put(':id/state/:newState')
@@ -70,7 +70,7 @@ export class ServiceSlotsController {
 
         try {
             return await this.serviceSlotsService.updateServiceSlotState(id, newState)
-                .then((slot) => ServiceSlotDto.fromEntity(slot));
+                .then((slot) => serviceSlotDtoFromEntity(slot));
         } catch (error) {
             // Check if error is a SERVICE_SLOT_ERROR_CODES
             if (error?.code && error.code in SERVICE_SLOT_ERROR_CODES) {

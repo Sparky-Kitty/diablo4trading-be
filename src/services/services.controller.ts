@@ -21,7 +21,7 @@ import { OptionalParseIntPipe } from '../pipes/optional-parse-int-pipe';
 import { UsersService } from '../users/users.service';
 import { ServiceSlot } from './service-slots/service-slots.entity';
 import { ServiceSlotsService } from './service-slots/service-slots.service';
-import { ServiceDto } from './service.dto';
+import { ServiceDto, fromEntity as serviceDtoFromEntity } from './service.dto';
 import { Service } from './services.entity';
 import { SERVICE_ERROR_CODES, ServicesService } from './services.service';
 
@@ -59,7 +59,7 @@ export class ServicesController {
             .paginate(offset, limit)
             .orderBy('bumpedAt', 'DESC')
             .getMany()
-            .then((services) => services.map(service => ServiceDto.fromEntity(service)));
+            .then((services) => services.map(service => serviceDtoFromEntity(service)));
     }
 
     @Post('')

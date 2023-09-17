@@ -1,9 +1,9 @@
-import { UserDto } from '../users/user.dto';
+import { UserDto, fromEntity as userDtoFromEntity } from '../users/user.dto';
 import { ServiceSlot } from './service-slots/service-slots.entity'; // Update this path as needed
 import { IService } from './service.interface'; // Assuming you've named your interface IService
 import { Service } from './services.entity';
 
-export class ServiceDto implements IService {
+export interface ServiceDto extends IService {
     id: number;
     realmType: string;
     title: string;
@@ -18,28 +18,31 @@ export class ServiceDto implements IService {
     updatedAt: Date;
     updatedBy: string;
     deleted: boolean;
+}
 
-    static fromEntity(entity: Service): ServiceDto {
-        const dto = new ServiceDto();
-        dto.id = entity.id;
-        dto.realmType = entity.realmType;
-        dto.title = `[${entity.realmType}] ${entity.title}`;
-        dto.content = entity.content;
-        dto.userId = entity.userId;
-        dto.tags = entity.tags;
-        dto.maxAcceptedSlots = entity.maxAcceptedSlots;
-        dto.slots = entity.slots; // Consider using ServiceSlotDto.fromEntity() if a DTO exists for ServiceSlot
-        dto.bumpedAt = entity.bumpedAt;
-        dto.createdAt = entity.createdAt;
-        dto.updatedAt = entity.updatedAt;
-        dto.updatedBy = entity.updatedBy;
-        dto.deleted = entity.deleted;
+export const fromEntity = (entity: Service): ServiceDto => {
+    const {
+        id, realmType, title, content, userId, tags, 
+        maxAcceptedSlots, slots, bumpedAt, createdAt, 
+        updatedAt, updatedBy, deleted, user
+    } = entity;
 
-        // Using UserDto.fromEntity to convert the User entity to UserDto
-        if (entity.user) {
-            dto.user = UserDto.fromEntity(entity.user);
-        }
+    const userDto = user ? userDtoFromEntity(user) : undefined;
 
-        return dto;
-    }
+    return {
+        id,
+        realmType,
+        title,
+        content,
+        userId,
+        tags,
+        maxAcceptedSlots,
+        slots, // TODO: Use DTO
+        bumpedAt,
+        createdAt,
+        updatedAt,
+        updatedBy,
+        deleted,
+        user: userDto
+    };
 }
