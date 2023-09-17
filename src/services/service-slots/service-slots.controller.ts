@@ -38,7 +38,6 @@ export class ServiceSlotsController {
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<ServiceSlotDto[]> {
-        console.log('here');
         return await this.serviceSlotsService
             .createQuery()
             .excludeEnded(excludeEnded === true)
