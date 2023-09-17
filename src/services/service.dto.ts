@@ -1,10 +1,8 @@
 import { UserDto, fromEntity as userDtoFromEntity } from '../users/user.dto';
-import { ServiceSlot } from './service-slots/service-slots.entity'; // Update this path as needed
 import { ServiceSlotDto, fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto'; // Update this path as needed
-import { IService } from './service.interface'; // Assuming you've named your interface IService
 import { Service } from './services.entity';
 
-export interface ServiceDto extends IService {
+export interface ServiceDto {
     id: number;
     realmType: string;
     title: string;

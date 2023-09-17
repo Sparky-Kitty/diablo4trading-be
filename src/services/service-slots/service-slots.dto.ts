@@ -2,9 +2,8 @@ import { API } from '@sanctuaryteam/shared';
 import { UserDto, fromEntity as userDtoFromEntity } from '../../users/user.dto';
 import { ServiceDto, fromEntity as serviceDtoFromEntity } from '../service.dto';
 import { ServiceSlot } from './service-slots.entity';
-import { IServiceSlot } from './service-slots.interface'; // Assuming you've named your interface IServiceSlot
 
-export interface ServiceSlotDto extends IServiceSlot {
+export interface ServiceSlotDto {
     id: number;
     state: API.ServiceSlotStates;
     service: ServiceDto;
