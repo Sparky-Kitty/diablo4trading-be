@@ -140,6 +140,26 @@ class CustomQueryBuilder {
         return this;
     }
 
+    searchByServiceOwner(id: number): CustomQueryBuilder {
+        if (typeof id === 'number') {
+            this.queryBuilder = this.queryBuilder.andWhere(
+                'service_slot.service_owner_user_id = :id',
+                { id },
+            );
+        }
+        return this;
+    }
+
+    searchBySlotClient(id: number): CustomQueryBuilder {
+        if (typeof id === 'number') {
+            this.queryBuilder = this.queryBuilder.andWhere(
+                'service_slot.client_user_id = :id',
+                { id },
+            );
+        }
+        return this;
+    }
+
     searchByUser(id: number): CustomQueryBuilder {
         if (typeof id === 'number') {
             this.queryBuilder = this.queryBuilder.andWhere(
