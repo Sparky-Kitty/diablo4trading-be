@@ -1,5 +1,6 @@
 import { UserDto, fromEntity as userDtoFromEntity } from '../users/user.dto';
 import { ServiceSlot } from './service-slots/service-slots.entity'; // Update this path as needed
+import { ServiceSlotDto, fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto'; // Update this path as needed
 import { IService } from './service.interface'; // Assuming you've named your interface IService
 import { Service } from './services.entity';
 
@@ -12,7 +13,7 @@ export interface ServiceDto extends IService {
     userId: number;
     tags: number;
     maxAcceptedSlots: number;
-    slots: ServiceSlot[]; // Consider creating a ServiceSlotDto if needed
+    slots: ServiceSlotDto[];
     bumpedAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -28,6 +29,10 @@ export const fromEntity = (entity: Service): ServiceDto => {
     } = entity;
 
     const userDto = user ? userDtoFromEntity(user) : undefined;
+    let serviceSlotsDto: ServiceSlotDto[];
+    slots.map(slot => {
+        serviceSlotsDto.push(slot ? serviceSlotDtoFromEntity(slot) : undefined)
+    })
 
     return {
         id,
@@ -37,7 +42,7 @@ export const fromEntity = (entity: Service): ServiceDto => {
         userId,
         tags,
         maxAcceptedSlots,
-        slots, // TODO: Use DTO
+        slots: serviceSlotsDto,
         bumpedAt,
         createdAt,
         updatedAt,

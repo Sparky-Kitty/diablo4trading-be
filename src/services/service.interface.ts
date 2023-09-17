@@ -1,5 +1,5 @@
 import { UserDto } from 'src/users/user.dto';
-import { ServiceSlot } from './service-slots/service-slots.entity';
+import { ServiceSlotDto } from './service-slots/service-slots.dto';
 
 export interface IService {
     id: number;
@@ -10,7 +10,7 @@ export interface IService {
     userId: number;
     tags: number;
     maxAcceptedSlots: number;
-    slots: ServiceSlot[];
+    slots: ServiceSlotDto[];
     bumpedAt: Date;
     createdAt: Date;
     updatedAt: Date;
