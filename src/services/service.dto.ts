@@ -27,10 +27,9 @@ export const fromEntity = (entity: Service): ServiceDto => {
     } = entity;
 
     const userDto = user ? userDtoFromEntity(user) : undefined;
-    let serviceSlotsDto: ServiceSlotDto[];
-    slots.map(slot => {
-        serviceSlotsDto.push(slot ? serviceSlotDtoFromEntity(slot) : undefined)
-    })
+    const serviceSlotsDto: ServiceSlotDto[] = [];
+
+    Array.isArray(slots) && slots.forEach(slot => serviceSlotsDto.push(serviceSlotDtoFromEntity(slot)))
 
     return {
         id,

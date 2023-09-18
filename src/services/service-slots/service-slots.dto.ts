@@ -22,7 +22,7 @@ export const fromEntity = (entity: ServiceSlot): ServiceSlotDto => {
     } = entity;
 
     const clientDto = client ? userDtoFromEntity(client, {hideDiscriminator: true}) : undefined;
-    const serviceOwnerDto = serviceOwner ? userDtoFromEntity(serviceOwner) : undefined;
+    const serviceOwnerDto = serviceOwner ? userDtoFromEntity(serviceOwner, {hideDiscriminator: true}) : undefined;
     const serviceDto = service ? serviceDtoFromEntity(service) : undefined;
 
     return {

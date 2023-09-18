@@ -8,6 +8,7 @@ import {
     Param,
     Put,
     Query,
+    Request,
     UseGuards,
 } from '@nestjs/common';
 import { API } from '@sanctuaryteam/shared';
@@ -17,6 +18,7 @@ import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
 import { ServiceSlotDto, fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { ServiceSlot } from './service-slots.entity';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
+import { RequestModel } from 'src/auth/request.model';
 
 const STATE_TRANSITIONS_MAP = {
     [API.ServiceSlotStates.Pending]: [API.ServiceSlotStates.Accepted, API.ServiceSlotStates.Rejected],
@@ -32,16 +34,20 @@ export class ServiceSlotsController {
     @SkipGuards()
     @Get('')
     async search(
+        @Request() req: RequestModel,
         @Query('userId', OptionalParseIntPipe) userId?: number,
         @Query('state') state?: API.ServiceSlotStates,
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<ServiceSlotDto[]> {
-        return await this.serviceSlotsService
-            .createQuery()
+        const reqUserId = req.user?.id;
+        let serviceSlotQuery = this.serviceSlotsService.createQuery();
+        if (reqUserId === userId) {            
+            serviceSlotQuery = serviceSlotQuery.searchByUser(userId)
+        }
+        return await serviceSlotQuery
             .excludeEnded(excludeEnded === true)
-            .searchByUser(userId)
             .searchByState(state)
             .includeService()
             .includeClient()
