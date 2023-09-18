@@ -1,10 +1,9 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserVouchCalculation } from './user-vouch/user-vouch-calculation.entity';
 import { UserVouch } from './user-vouch/user-vouch.entity';
-import { IUser } from './user.interface';
 
 @Entity()
-export class User implements IUser {
+export class User {
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -1,9 +1,8 @@
-import { UserDto } from '../users/user.dto';
-import { ServiceSlot } from './service-slots/service-slots.entity'; // Update this path as needed
-import { IService } from './service.interface'; // Assuming you've named your interface IService
+import { UserDto, fromEntity as userDtoFromEntity } from '../users/user.dto';
+import { ServiceSlotDto, fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto'; // Update this path as needed
 import { Service } from './services.entity';
 
-export class ServiceDto implements IService {
+export interface ServiceDto {
     id: number;
     realmType: string;
     title: string;
@@ -12,34 +11,40 @@ export class ServiceDto implements IService {
     userId: number;
     tags: number;
     maxAcceptedSlots: number;
-    slots: ServiceSlot[]; // Consider creating a ServiceSlotDto if needed
+    slots: ServiceSlotDto[];
     bumpedAt: Date;
     createdAt: Date;
     updatedAt: Date;
     updatedBy: string;
     deleted: boolean;
+}
 
-    static fromEntity(entity: Service): ServiceDto {
-        const dto = new ServiceDto();
-        dto.id = entity.id;
-        dto.realmType = entity.realmType;
-        dto.title = entity.title;
-        dto.content = entity.content;
-        dto.userId = entity.userId;
-        dto.tags = entity.tags;
-        dto.maxAcceptedSlots = entity.maxAcceptedSlots;
-        dto.slots = entity.slots; // Consider using ServiceSlotDto.fromEntity() if a DTO exists for ServiceSlot
-        dto.bumpedAt = entity.bumpedAt;
-        dto.createdAt = entity.createdAt;
-        dto.updatedAt = entity.updatedAt;
-        dto.updatedBy = entity.updatedBy;
-        dto.deleted = entity.deleted;
+export const fromEntity = (entity: Service): ServiceDto => {
+    const {
+        id, realmType, title, content, userId, tags, 
+        maxAcceptedSlots, slots, bumpedAt, createdAt, 
+        updatedAt, updatedBy, deleted, user
+    } = entity;
 
-        // Using UserDto.fromEntity to convert the User entity to UserDto
-        if (entity.user) {
-            dto.user = UserDto.fromEntity(entity.user);
-        }
+    const userDto = user ? userDtoFromEntity(user) : undefined;
+    const serviceSlotsDto: ServiceSlotDto[] = [];
 
-        return dto;
-    }
+    Array.isArray(slots) && slots.forEach(slot => serviceSlotsDto.push(serviceSlotDtoFromEntity(slot)))
+
+    return {
+        id,
+        realmType,
+        title,
+        content,
+        userId,
+        tags,
+        maxAcceptedSlots,
+        slots: serviceSlotsDto,
+        bumpedAt,
+        createdAt,
+        updatedAt,
+        updatedBy,
+        deleted,
+        user: userDto
+    };
 }

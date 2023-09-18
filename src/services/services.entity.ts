@@ -11,10 +11,9 @@ import {
 
 import { User } from '../users/users.entity';
 import { ServiceSlot } from './service-slots/service-slots.entity';
-import { IService } from './service.interface';
 
 @Entity({ name: 'service' })
-export class Service implements IService {
+export class Service {
     @PrimaryGeneratedColumn()
     id: number;
 
