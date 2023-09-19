@@ -59,12 +59,8 @@ export class ItemListing {
         type: 'integer',
         name: 'diablo_item_id',
         nullable: false,
-        transformer: {
-            to: (value: number) => value, // When writing to the database
-            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
-        },
     })
-    diabloItemId: string;
+    diabloItemId: number;
 
     @OneToOne(() => DiabloItem)
     @JoinColumn({ name: 'diablo_item_id' })

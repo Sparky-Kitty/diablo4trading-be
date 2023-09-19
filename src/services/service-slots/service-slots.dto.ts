@@ -27,14 +27,14 @@ export const fromEntity = (entity: ServiceSlot, options: FromEntityOptions = {})
     const serviceDto = service ? serviceDtoFromEntity(service, { hideDiscriminator }) : undefined;
 
     return {
-        id: String(id),
+        id,
         state,
         updatedAt,
         client: clientDto,
-        clientUserId: String(clientUserId),
+        clientUserId,
         serviceOwner: serviceOwnerDto,
-        serviceOwnerUserId: String(serviceOwnerUserId),
+        serviceOwnerUserId,
         service: serviceDto,
-        serviceId: String(serviceId),
+        serviceId,
     };
 };

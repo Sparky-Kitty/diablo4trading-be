@@ -38,7 +38,7 @@ export const fromEntity = (entity: Service, options: FromEntityOptions = {}): AP
         realmType,
         title,
         content,
-        userId: String(userId),
+        userId,
         tags,
         maxAcceptedSlots,
         slots: serviceSlotsDto,
