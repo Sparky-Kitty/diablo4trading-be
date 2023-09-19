@@ -8,30 +8,30 @@ import { UserVouchState } from './user-vouch-state.enum';
 @Entity('user_vouch')
 export class UserVouch {
     @PrimaryColumn({
-        type: 'int',
+        type: 'integer',
         generated: true,
         update: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     id: string;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     recipientId: string;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     authorId: string;
@@ -40,10 +40,10 @@ export class UserVouch {
     referenceType: string;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     referenceId: string;

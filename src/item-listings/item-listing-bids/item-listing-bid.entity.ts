@@ -14,12 +14,12 @@ import { ItemListing } from '../item-listing.entity';
 @Entity('item_listing_bid')
 export class ItemListingBid {
     @PrimaryColumn({
-        type: 'int',
+        type: 'integer',
         generated: true,
         update: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     id: string;
@@ -28,7 +28,7 @@ export class ItemListingBid {
         nullable: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     userId: string;
@@ -41,7 +41,7 @@ export class ItemListingBid {
         nullable: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     itemListingId: string;

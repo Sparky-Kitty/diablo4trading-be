@@ -6,12 +6,12 @@ import { DiabloItemAffix } from './diablo-item-affix.entity';
 @Entity({ name: 'diablo_item' })
 export class DiabloItem {
     @PrimaryColumn({
-        type: 'int',
+        type: 'integer',
         generated: true,
         update: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     id: string;

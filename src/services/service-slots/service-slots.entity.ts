@@ -7,12 +7,12 @@ import { Service } from '../services.entity';
 @Entity({ name: 'service_slot' })
 export class ServiceSlot {
     @PrimaryColumn({
-        type: 'int',
+        type: 'integer',
         generated: true,
         update: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     id: string;
@@ -28,11 +28,11 @@ export class ServiceSlot {
     service: Service;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         name: 'service_id',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     serviceId: string;
@@ -46,11 +46,11 @@ export class ServiceSlot {
     serviceOwner: User;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         name: 'service_owner_user_id',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     serviceOwnerUserId: string;
@@ -60,11 +60,11 @@ export class ServiceSlot {
     client: User;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         name: 'client_user_id',
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     clientUserId: string;

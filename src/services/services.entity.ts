@@ -15,12 +15,12 @@ import { ServiceSlot } from './service-slots/service-slots.entity';
 @Entity({ name: 'service' })
 export class Service {
     @PrimaryColumn({
-        type: 'int',
+        type: 'integer',
         generated: true,
         update: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     id: string;
@@ -41,12 +41,12 @@ export class Service {
     user: User;
 
     @Column({
-        type: 'int',
+        type: 'integer',
         name: 'user_id',
         nullable: false,
         transformer: {
             to: (value: number) => value, // When writing to the database
-            from: (value: number) => value.toString(), // When reading from the database
+            from: (value: number | null) => value?.toString() ?? null, // When reading from the database
         },
     })
     userId: string;
