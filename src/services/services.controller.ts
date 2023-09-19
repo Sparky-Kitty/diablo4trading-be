@@ -14,6 +14,7 @@ import {
     Request,
     UseGuards,
 } from '@nestjs/common';
+import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
@@ -24,7 +25,6 @@ import { ServiceSlotsService } from './service-slots/service-slots.service';
 import { fromEntity as serviceDtoFromEntity } from './service.dto';
 import { Service } from './services.entity';
 import { SERVICE_ERROR_CODES, ServicesService } from './services.service';
-import { API } from '@sanctuaryteam/shared';
 
 const MAX_SERVICE_COUNT = 3;
 
