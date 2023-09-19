@@ -10,9 +10,9 @@ export class DiabloItem {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 

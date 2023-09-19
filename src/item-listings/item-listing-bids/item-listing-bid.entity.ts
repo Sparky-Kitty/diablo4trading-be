@@ -18,18 +18,18 @@ export class ItemListingBid {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 
-    @Column({ 
+    @Column({
         nullable: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        } 
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     userId: string;
 
@@ -37,13 +37,13 @@ export class ItemListingBid {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ 
+    @Column({
         nullable: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
-     })
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
+    })
     itemListingId: string;
 
     @OneToOne(() => ItemListing)

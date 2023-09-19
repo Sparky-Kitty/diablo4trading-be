@@ -26,9 +26,9 @@ export class ItemListing {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 
@@ -40,14 +40,14 @@ export class ItemListing {
     @Column({ type: 'uuid', nullable: false, default: '' })
     uuid: string;
 
-    @Column({ 
-        type: 'integer', 
-    name: 'seller_id', 
-    nullable: false,
+    @Column({
+        type: 'integer',
+        name: 'seller_id',
+        nullable: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        } 
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     sellerId: string;
 
@@ -55,15 +55,15 @@ export class ItemListing {
     @JoinColumn({ name: 'seller_id' })
     seller: User;
 
-    @Column({ 
-        type: 'integer', 
-        name: 'diablo_item_id', 
+    @Column({
+        type: 'integer',
+        name: 'diablo_item_id',
         nullable: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
-     })
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
+    })
     diabloItemId: string;
 
     @OneToOne(() => DiabloItem)

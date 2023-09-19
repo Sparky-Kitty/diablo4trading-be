@@ -18,12 +18,12 @@ export class UserVouchCalculation {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ 
+    @Column({
         type: 'int',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        } 
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     userId: string;
 

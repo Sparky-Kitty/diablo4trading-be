@@ -1,14 +1,6 @@
 import { ItemListing } from 'src/item-listings/item-listing.entity';
 import { Service } from 'src/services/services.entity';
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryColumn,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { PolymorphicParent } from 'typeorm-polymorphic';
 import { User } from '../users.entity';
 import { UserVouchState } from './user-vouch-state.enum';
@@ -20,27 +12,27 @@ export class UserVouch {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 
     @Column({
         type: 'int',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     recipientId: string;
 
     @Column({
         type: 'int',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     authorId: string;
 
@@ -50,9 +42,9 @@ export class UserVouch {
     @Column({
         type: 'int',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     referenceId: string;
 

@@ -19,9 +19,9 @@ export class Service {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 
@@ -40,15 +40,15 @@ export class Service {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ 
-        type: 'int', 
-        name: 'user_id', 
+    @Column({
+        type: 'int',
+        name: 'user_id',
         nullable: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
-     })
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
+    })
     userId: string;
 
     @Column({ nullable: false, default: 1 })

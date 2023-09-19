@@ -1,12 +1,4 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryColumn,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 import { API } from '@sanctuaryteam/shared';
 import { User } from '../../users/users.entity';
@@ -19,9 +11,9 @@ export class ServiceSlot {
         generated: true,
         update: false,
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     id: string;
 
@@ -35,14 +27,14 @@ export class ServiceSlot {
     @JoinColumn({ name: 'service_id' })
     service: Service;
 
-    @Column({ 
-        type: 'int', 
+    @Column({
+        type: 'int',
         name: 'service_id',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        }
-     })
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
+    })
     serviceId: string;
 
     /*
@@ -53,13 +45,13 @@ export class ServiceSlot {
     @JoinColumn({ name: 'service_owner_user_id' })
     serviceOwner: User;
 
-    @Column({ 
-        type: 'int', 
+    @Column({
+        type: 'int',
         name: 'service_owner_user_id',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        } 
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     serviceOwnerUserId: string;
 
@@ -67,13 +59,13 @@ export class ServiceSlot {
     @JoinColumn({ name: 'client_user_id' })
     client: User;
 
-    @Column({ 
-        type: 'int', 
+    @Column({
+        type: 'int',
         name: 'client_user_id',
         transformer: {
-            to: (value: number) => value,  // When writing to the database
-            from: (value: number) => value.toString(),  // When reading from the database
-        } 
+            to: (value: number) => value, // When writing to the database
+            from: (value: number) => value.toString(), // When reading from the database
+        },
     })
     clientUserId: string;
 
