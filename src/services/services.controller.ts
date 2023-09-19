@@ -19,11 +19,12 @@ import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../pipes/optional-parse-int-pipe';
 import { UsersService } from '../users/users.service';
-import { fromEntity as serviceSlotDtoFromEntity, ServiceSlotDto } from './service-slots/service-slots.dto';
+import { fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto';
 import { ServiceSlotsService } from './service-slots/service-slots.service';
-import { fromEntity as serviceDtoFromEntity, ServiceDto } from './service.dto';
+import { fromEntity as serviceDtoFromEntity } from './service.dto';
 import { Service } from './services.entity';
 import { SERVICE_ERROR_CODES, ServicesService } from './services.service';
+import { API } from '@sanctuaryteam/shared';
 
 const MAX_SERVICE_COUNT = 3;
 
@@ -46,7 +47,7 @@ export class ServicesController {
         @Query('deleted') deleted?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
-    ): Promise<ServiceDto[]> {
+    ): Promise<API.ServiceDto[]> {
         return await this.servicesService
             .createQuery()
             .withUser()
@@ -64,7 +65,7 @@ export class ServicesController {
     }
 
     @Post('')
-    async create(@Body() dto: Partial<Service>, @Request() req: RequestModel): Promise<ServiceDto> {
+    async create(@Body() dto: Partial<Service>, @Request() req: RequestModel): Promise<API.ServiceDto> {
         const user = req.user;
 
         const notDeletedServicesCount = await this.servicesService.countNotDeletedServices(user);
@@ -84,7 +85,7 @@ export class ServicesController {
     async update(
         @Param('id') id: number,
         @Body() updateDto: Partial<Service>,
-    ): Promise<ServiceDto> {
+    ): Promise<API.ServiceDto> {
         const existingService = await this.servicesService
             .createQuery()
             .includeSlots()
@@ -144,7 +145,7 @@ export class ServicesController {
     async claimSlot(
         @Param('id') id: number,
         @Request() req: RequestModel,
-    ): Promise<ServiceSlotDto> {
+    ): Promise<API.ServiceSlotDto> {
         const userId = req.user.id;
 
         const existingService = await this.servicesService

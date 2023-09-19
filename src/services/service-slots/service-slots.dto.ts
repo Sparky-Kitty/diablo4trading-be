@@ -1,25 +1,13 @@
 import { API } from '@sanctuaryteam/shared';
-import { fromEntity as userDtoFromEntity, UserDto } from '../../users/user.dto';
-import { fromEntity as serviceDtoFromEntity, ServiceDto } from '../service.dto';
+import { fromEntity as userDtoFromEntity } from '../../users/user.dto';
+import { fromEntity as serviceDtoFromEntity } from '../service.dto';
 import { ServiceSlot } from './service-slots.entity';
-
-export interface ServiceSlotDto {
-    id: number;
-    state: API.ServiceSlotStates;
-    service: ServiceDto;
-    serviceId?: number;
-    serviceOwner: UserDto;
-    serviceOwnerUserId: number;
-    client: UserDto;
-    clientUserId: number;
-    updatedAt: Date;
-}
 
 interface FromEntityOptions {
     hideDiscriminator?: boolean;
 }
 
-export const fromEntity = (entity: ServiceSlot, options: FromEntityOptions = {}): ServiceSlotDto => {
+export const fromEntity = (entity: ServiceSlot, options: FromEntityOptions = {}): API.ServiceSlotDto => {
     const {
         id,
         state,
@@ -39,14 +27,14 @@ export const fromEntity = (entity: ServiceSlot, options: FromEntityOptions = {})
     const serviceDto = service ? serviceDtoFromEntity(service, { hideDiscriminator }) : undefined;
 
     return {
-        id,
+        id: String(id),
         state,
         updatedAt,
         client: clientDto,
-        clientUserId,
+        clientUserId: String(clientUserId),
         serviceOwner: serviceOwnerDto,
-        serviceOwnerUserId,
+        serviceOwnerUserId: String(serviceOwnerUserId),
         service: serviceDto,
-        serviceId,
+        serviceId: String(serviceId),
     };
 };

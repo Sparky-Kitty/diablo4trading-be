@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
-import { fromEntity as serviceSlotDtoFromEntity, ServiceSlotDto } from './service-slots.dto';
+import { fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { ServiceSlot } from './service-slots.entity';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
 
@@ -40,7 +40,7 @@ export class ServiceSlotsController {
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
-    ): Promise<ServiceSlotDto[]> {
+    ): Promise<API.ServiceSlotDto[]> {
         const reqUserId = req.user?.id;
         let serviceSlotQuery = this.serviceSlotsService.createQuery();
         if (reqUserId === userId) {
@@ -62,7 +62,7 @@ export class ServiceSlotsController {
     async updateState(
         @Param('id') id: number,
         @Param('newState') newState: API.ServiceSlotStates,
-    ): Promise<ServiceSlotDto> {
+    ): Promise<API.ServiceSlotDto> {
         const slot = await this.serviceSlotsService.findById(id);
 
         if (!slot) {
