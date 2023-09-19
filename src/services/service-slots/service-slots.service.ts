@@ -26,7 +26,7 @@ export class ServiceSlotsService {
         );
     }
 
-    async findById(id: number): Promise<ServiceSlot> {
+    async findById(id: string): Promise<ServiceSlot> {
         return this.serviceSlotRepository.findOneBy({ id });
     }
 
@@ -58,7 +58,7 @@ export class ServiceSlotsService {
         return await this.serviceSlotRepository.save(serviceSlot);
     }
 
-    async updateServiceSlotState(id: number, state: API.ServiceSlotStates): Promise<ServiceSlot> {
+    async updateServiceSlotState(id: string, state: API.ServiceSlotStates): Promise<ServiceSlot> {
         // Check the validity of the state before proceeding
 
         if (!Object.values(API.ServiceSlotStates).includes(state)) {
@@ -160,8 +160,8 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUser(id: number): CustomQueryBuilder {
-        if (typeof id === 'number') {
+    searchByUser(id: string): CustomQueryBuilder {
+        if (typeof id === 'string') {
             this.queryBuilder = this.queryBuilder.andWhere(
                 new Brackets(queryBuilder => {
                     queryBuilder.where('service_slot.service_owner_user_id = :id', { id })

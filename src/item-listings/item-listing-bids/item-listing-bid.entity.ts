@@ -6,25 +6,45 @@ import {
     JoinColumn,
     ManyToOne,
     OneToOne,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { ItemListing } from '../item-listing.entity';
 
 @Entity('item_listing_bid')
 export class ItemListingBid {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
-    @Column({ nullable: false })
-    userId: number;
+    @Column({ 
+        nullable: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        } 
+    })
+    userId: string;
 
     @ManyToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ nullable: false })
-    itemListingId: number;
+    @Column({ 
+        nullable: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+     })
+    itemListingId: string;
 
     @OneToOne(() => ItemListing)
     @JoinColumn({ name: 'item_listing_id' })

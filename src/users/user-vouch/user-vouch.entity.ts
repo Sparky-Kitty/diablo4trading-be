@@ -6,7 +6,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { PolymorphicParent } from 'typeorm-polymorphic';
@@ -15,20 +15,46 @@ import { UserVouchState } from './user-vouch-state.enum';
 
 @Entity('user_vouch')
 export class UserVouch {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
-    @Column()
-    recipientId: number;
+    @Column({
+        type: 'int',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    recipientId: string;
 
-    @Column()
-    authorId: number;
+    @Column({
+        type: 'int',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    authorId: string;
 
     @Column()
     referenceType: string;
 
-    @Column()
-    referenceId: number;
+    @Column({
+        type: 'int',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    referenceId: string;
 
     @Column()
     isPositive: boolean;

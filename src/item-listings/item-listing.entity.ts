@@ -6,7 +6,7 @@ import {
     JoinColumn,
     ManyToOne,
     OneToOne,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -21,8 +21,16 @@ export enum ItemListingState {
 
 @Entity('item_listing')
 export class ItemListing {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
     @BeforeInsert()
     generateUuid() {
@@ -32,15 +40,31 @@ export class ItemListing {
     @Column({ type: 'uuid', nullable: false, default: '' })
     uuid: string;
 
-    @Column({ type: 'integer', name: 'seller_id', nullable: false })
-    sellerId: number;
+    @Column({ 
+        type: 'integer', 
+    name: 'seller_id', 
+    nullable: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        } 
+    })
+    sellerId: string;
 
     @ManyToOne(() => User)
     @JoinColumn({ name: 'seller_id' })
     seller: User;
 
-    @Column({ type: 'integer', name: 'diablo_item_id', nullable: false })
-    diabloItemId: number;
+    @Column({ 
+        type: 'integer', 
+        name: 'diablo_item_id', 
+        nullable: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+     })
+    diabloItemId: string;
 
     @OneToOne(() => DiabloItem)
     @JoinColumn({ name: 'diablo_item_id' })

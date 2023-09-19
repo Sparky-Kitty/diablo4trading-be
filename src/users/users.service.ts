@@ -10,7 +10,7 @@ export class UsersService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
     ) {}
 
-    async findById(id: number): Promise<User | undefined> {
+    async findById(id: string): Promise<User | undefined> {
         return this.userRepository.findOne({ where: { id } });
     }
 

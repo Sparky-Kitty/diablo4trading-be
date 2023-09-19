@@ -5,7 +5,7 @@ import {
     JoinColumn,
     ManyToOne,
     OneToMany,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 
@@ -14,8 +14,16 @@ import { ServiceSlot } from './service-slots/service-slots.entity';
 
 @Entity({ name: 'service' })
 export class Service {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
     @Column({
         nullable: false,
@@ -32,8 +40,16 @@ export class Service {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ type: 'int', name: 'user_id', nullable: false })
-    userId: number;
+    @Column({ 
+        type: 'int', 
+        name: 'user_id', 
+        nullable: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+     })
+    userId: string;
 
     @Column({ nullable: false, default: 1 })
     tags: number;

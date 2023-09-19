@@ -29,7 +29,7 @@ export class UserVouchService {
         });
     }
 
-    private async referenceExists(referenceType: 'ItemListing' | 'Service', referenceId: number): Promise<boolean> {
+    private async referenceExists(referenceType: 'ItemListing' | 'Service', referenceId: string): Promise<boolean> {
         switch (referenceType) {
             case 'ItemListing':
                 return this.itemListingRepository.exist({ where: { id: referenceId } });
@@ -44,7 +44,7 @@ export class UserVouchService {
 
     async createVouch(
         referenceType: 'ItemListing' | 'Service',
-        referenceId: number,
+        referenceId: string,
         recipient: User,
         author: User,
     ): Promise<UserVouch> {

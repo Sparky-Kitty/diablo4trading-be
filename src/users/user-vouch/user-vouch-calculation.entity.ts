@@ -18,8 +18,14 @@ export class UserVouchCalculation {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ type: 'integer' })
-    userId: number;
+    @Column({ 
+        type: 'int',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        } 
+    })
+    userId: string;
 
     @Column({ type: 'integer' })
     score: number;

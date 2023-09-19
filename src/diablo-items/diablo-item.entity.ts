@@ -1,12 +1,20 @@
 import { Game } from '@diablosnaps/common';
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { DiabloItemAffix } from './diablo-item-affix.entity';
 
 @Entity({ name: 'diablo_item' })
 export class DiabloItem {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
     @BeforeInsert()
     generateUuid() {

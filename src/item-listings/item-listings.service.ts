@@ -11,7 +11,7 @@ export interface TradePostCreateData {
     item: Partial<DiabloItem>;
     picture: string;
     // Get this from the auth token?
-    sellerId: number;
+    sellerId: string;
     reservePrice: number | null;
     minimumBid: number | null;
     duration: number;

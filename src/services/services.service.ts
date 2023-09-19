@@ -34,7 +34,7 @@ export class ServicesService {
         return await this.serviceRepository.save(service);
     }
 
-    async updateService(id: number, dto: Partial<Service>): Promise<Service> {
+    async updateService(id: string, dto: Partial<Service>): Promise<Service> {
         const existingService = await this.serviceRepository.findOneBy({ id });
         if (!existingService) {
             throw new ServiceResponseException(
@@ -47,19 +47,19 @@ export class ServicesService {
         return await this.serviceRepository.findOneBy({ id });
     }
 
-    async deleteService(id: number): Promise<void> {
+    async deleteService(id: string): Promise<void> {
         await this.serviceRepository.delete(id);
     }
 
-    async softDeleteService(id: number): Promise<void> {
+    async softDeleteService(id: string): Promise<void> {
         await this.serviceRepository.update(id, { deleted: true });
     }
 
-    async undoSoftDeleteService(id: number): Promise<void> {
+    async undoSoftDeleteService(id: string): Promise<void> {
         await this.serviceRepository.update(id, { deleted: false });
     }
 
-    async bumpService(id: number): Promise<void> {
+    async bumpService(id: string): Promise<void> {
         const service = await this.serviceRepository.findOne({ where: { id } });
         if (!service) {
             throw new ServiceResponseException(
@@ -93,7 +93,7 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchById(id: number): CustomQueryBuilder {
+    searchById(id: string): CustomQueryBuilder {
         this.queryBuilder = this.queryBuilder.andWhere('service.id = :id', { id });
         return this;
     }
@@ -128,8 +128,8 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUserId(userId?: number): CustomQueryBuilder {
-        if (typeof userId === 'number') {
+    searchByUserId(userId?: string): CustomQueryBuilder {
+        if (typeof userId === 'string') {
             this.queryBuilder = this.queryBuilder.andWhere(
                 `service.userId = :userId`,
                 { userId },

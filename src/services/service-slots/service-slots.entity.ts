@@ -4,7 +4,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
-    PrimaryGeneratedColumn,
+    PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 
@@ -14,8 +14,16 @@ import { Service } from '../services.entity';
 
 @Entity({ name: 'service_slot' })
 export class ServiceSlot {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn({
+        type: 'int',
+        generated: true,
+        update: false,
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+    })
+    id: string;
 
     @Column({
         nullable: false,
@@ -27,8 +35,15 @@ export class ServiceSlot {
     @JoinColumn({ name: 'service_id' })
     service: Service;
 
-    @Column({ type: 'int', name: 'service_id' })
-    serviceId: number;
+    @Column({ 
+        type: 'int', 
+        name: 'service_id',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        }
+     })
+    serviceId: string;
 
     /*
      This is 'redundant' information, but fetching service slots for a service owner will be a very common operation.
@@ -38,15 +53,29 @@ export class ServiceSlot {
     @JoinColumn({ name: 'service_owner_user_id' })
     serviceOwner: User;
 
-    @Column({ type: 'int', name: 'service_owner_user_id' })
-    serviceOwnerUserId: number;
+    @Column({ 
+        type: 'int', 
+        name: 'service_owner_user_id',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        } 
+    })
+    serviceOwnerUserId: string;
 
     @ManyToOne(() => User, { nullable: false })
     @JoinColumn({ name: 'client_user_id' })
     client: User;
 
-    @Column({ type: 'int', name: 'client_user_id' })
-    clientUserId: number;
+    @Column({ 
+        type: 'int', 
+        name: 'client_user_id',
+        transformer: {
+            to: (value: number) => value,  // When writing to the database
+            from: (value: number) => value.toString(),  // When reading from the database
+        } 
+    })
+    clientUserId: string;
 
     @CreateDateColumn()
     createdAt: Date;

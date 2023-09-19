@@ -34,7 +34,7 @@ export const fromEntity = (entity: Service, options: FromEntityOptions = {}): AP
         && slots.forEach(slot => serviceSlotsDto.push(serviceSlotDtoFromEntity(slot, { hideDiscriminator })));
 
     return {
-        id: String(id),
+        id,
         realmType,
         title,
         content,

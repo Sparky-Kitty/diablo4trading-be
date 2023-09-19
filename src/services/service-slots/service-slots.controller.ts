@@ -35,7 +35,7 @@ export class ServiceSlotsController {
     @Get('')
     async search(
         @Request() req: RequestModel,
-        @Query('userId', OptionalParseIntPipe) userId?: number,
+        @Query('userId', OptionalParseIntPipe) userId?: string,
         @Query('state') state?: API.ServiceSlotStates,
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
@@ -60,7 +60,7 @@ export class ServiceSlotsController {
 
     @Put(':id/state/:newState')
     async updateState(
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Param('newState') newState: API.ServiceSlotStates,
     ): Promise<API.ServiceSlotDto> {
         const slot = await this.serviceSlotsService.findById(id);

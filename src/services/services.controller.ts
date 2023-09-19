@@ -43,7 +43,7 @@ export class ServicesController {
         @Query('serverType') serverType?: string,
         @Query('title') title?: string,
         @Query('tags', OptionalParseIntPipe) tags?: number,
-        @Query('userId', OptionalParseIntPipe) userId?: number,
+        @Query('userId', OptionalParseIntPipe) userId?: string,
         @Query('deleted') deleted?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
@@ -83,7 +83,7 @@ export class ServicesController {
 
     @Put(':id')
     async update(
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Body() updateDto: Partial<Service>,
     ): Promise<API.ServiceDto> {
         const existingService = await this.servicesService
@@ -109,22 +109,22 @@ export class ServicesController {
     }
 
     @Delete(':id/delete')
-    async delete(@Param('id') id: number): Promise<void> {
+    async delete(@Param('id') id: string): Promise<void> {
         await this.servicesService.deleteService(id);
     }
 
     @Delete(':id/soft-delete')
-    async softDelete(@Param('id') id: number): Promise<void> {
+    async softDelete(@Param('id') id: string): Promise<void> {
         await this.servicesService.softDeleteService(id);
     }
 
     @Put(':id/undo-soft-delete')
-    async undoSoftDelete(@Param('id') id: number): Promise<void> {
+    async undoSoftDelete(@Param('id') id: string): Promise<void> {
         await this.servicesService.undoSoftDeleteService(id);
     }
 
     @Post(':id/bump')
-    async bumpService(@Param('id') id: number): Promise<void> {
+    async bumpService(@Param('id') id: string): Promise<void> {
         try {
             await this.servicesService.bumpService(id);
         } catch (error) {
@@ -143,7 +143,7 @@ export class ServicesController {
 
     @Post(':id/claim-slot')
     async claimSlot(
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Request() req: RequestModel,
     ): Promise<API.ServiceSlotDto> {
         const userId = req.user.id;
