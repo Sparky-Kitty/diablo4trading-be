@@ -1,8 +1,8 @@
 import { Service } from 'src/services/services.entity';
 import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 import { UserVouchCalculation } from './user-vouch/user-vouch-calculation.entity';
 import { UserVouch } from './user-vouch/user-vouch.entity';
-import {v4 as uuid} from 'uuid';
 
 @Entity()
 export class User {

@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { API } from '@sanctuaryteam/shared';
+import { User } from 'src/users/users.entity';
 import { Brackets, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../../common/exceptions';
 import { ServiceSlot } from './service-slots.entity';
@@ -160,14 +161,27 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUser(id: number): CustomQueryBuilder {
-        if (typeof id === 'number') {
-            this.queryBuilder = this.queryBuilder.andWhere(
-                new Brackets(queryBuilder => {
-                    queryBuilder.where('service_slot.service_owner_user_id = :id', { id })
-                        .orWhere('service_slot.client_user_id = :id', { id });
-                }),
-            );
+    searchByUser(userUuid: string): CustomQueryBuilder {
+        if (typeof userUuid === 'string') {
+            this.queryBuilder = this.queryBuilder
+                .innerJoinAndMapOne(
+                    'service_slot.client',
+                    User,
+                    'slot_client',
+                    'service_slot.client_user_id = slot_client.id',
+                )
+                .innerJoinAndMapOne(
+                    'service_slot.service_owner',
+                    User,
+                    'slot_service_owner',
+                    'service_slot.service_owner_user_id = slot_service_owner.id',
+                )
+                .andWhere(
+                    new Brackets(queryBuilder => {
+                        queryBuilder.where('slot_client.uuid = :userUuid', { userUuid })
+                            .orWhere('slot_service_owner.uuid = :userUuid', { userUuid });
+                    }),
+                );
         }
         return this;
     }

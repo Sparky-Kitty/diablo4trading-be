@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/users.entity';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../common/exceptions';
-import { User } from '../users/users.entity';
 import { Service } from './services.entity';
 // Minutes
 const MIN_BUMP_INTERVAL = 30;
@@ -128,12 +128,12 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUserId(userId?: number): CustomQueryBuilder {
-        if (typeof userId === 'number') {
-            this.queryBuilder = this.queryBuilder.andWhere(
-                `service.userId = :userId`,
-                { userId },
-            );
+    searchByUserId(userUuid?: string): CustomQueryBuilder {
+        if (typeof userUuid === 'string') {
+            console.log('Inputted User ID: ' + userUuid);
+            this.queryBuilder = this.queryBuilder
+                .innerJoin('service.user', 'service_user')
+                .andWhere('service_user.uuid = :userUuid', { userUuid });
         }
         return this;
     }

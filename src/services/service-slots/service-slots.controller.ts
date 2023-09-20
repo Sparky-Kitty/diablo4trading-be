@@ -8,16 +8,13 @@ import {
     Param,
     Put,
     Query,
-    Request,
     UseGuards,
 } from '@nestjs/common';
 import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
-import { fromEntity as serviceSlotDtoFromEntity, ServiceSlotDto } from './service-slots.dto';
-import { ServiceSlot } from './service-slots.entity';
+import { fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
 
 const STATE_TRANSITIONS_MAP = {
@@ -34,18 +31,14 @@ export class ServiceSlotsController {
     @SkipGuards()
     @Get('')
     async search(
-        @Request() req: RequestModel,
-        @Query('userId', OptionalParseIntPipe) userId?: number,
+        @Query('userId') userUuid?: string,
         @Query('state') state?: API.ServiceSlotStates,
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
-    ): Promise<ServiceSlotDto[]> {
-        const reqUserId = req.user?.id;
+    ): Promise<API.ServiceSlotDto[]> {
         let serviceSlotQuery = this.serviceSlotsService.createQuery();
-        if (reqUserId === userId) {
-            serviceSlotQuery = serviceSlotQuery.searchByUser(userId);
-        }
+        serviceSlotQuery = serviceSlotQuery.searchByUser(userUuid ?? null);
         return await serviceSlotQuery
             .excludeEnded(excludeEnded === true)
             .searchByState(state)
@@ -62,7 +55,7 @@ export class ServiceSlotsController {
     async updateState(
         @Param('id') id: number,
         @Param('newState') newState: API.ServiceSlotStates,
-    ): Promise<ServiceSlotDto> {
+    ): Promise<API.ServiceSlotDto> {
         const slot = await this.serviceSlotsService.findById(id);
 
         if (!slot) {
