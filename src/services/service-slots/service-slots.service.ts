@@ -61,7 +61,7 @@ export class ServiceSlotsService {
 
     async updateServiceSlotState(slotUuid: string, state: API.ServiceSlotStates): Promise<ServiceSlot> {
         // Check the validity of the state before proceeding
-        console.log(slotUuid)
+        console.log(slotUuid);
 
         if (!Object.values(API.ServiceSlotStates).includes(state)) {
             throw new ServiceResponseException(
