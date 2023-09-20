@@ -93,7 +93,7 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchById(serviceUuid: string): CustomQueryBuilder {
+    searchByServiceUuid(serviceUuid: string): CustomQueryBuilder {
         this.queryBuilder = this.queryBuilder.andWhere('service.uuid = :serviceUuid', { serviceUuid });
         return this;
     }
@@ -128,7 +128,7 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUserId(userUuid?: string): CustomQueryBuilder {
+    searchByUserUuid(userUuid?: string): CustomQueryBuilder {
         if (typeof userUuid === 'string') {
             this.queryBuilder = this.queryBuilder
                 .innerJoin('service.user', 'service_user')

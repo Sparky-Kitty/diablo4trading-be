@@ -31,7 +31,7 @@ export class UsersService {
                 discordId,
                 email,
                 battleNetTag,
-                uuid, // Add other relevant properties here
+                uuid,
             });
 
             await this.userRepository.save(user);

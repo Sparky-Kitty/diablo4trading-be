@@ -54,7 +54,7 @@ export class ServicesController {
             .searchByRealmType(serverType)
             .searchByTitle(title)
             .searchByTags(tags)
-            .searchByUserId(userUuid)
+            .searchByUserUuid(userUuid)
             .searchByDeleted(deleted === true)
             // Need to include the serviceSlotsOpen and serviceSlotsAvailable
             // .includeSlots()
@@ -89,7 +89,7 @@ export class ServicesController {
         const existingService = await this.servicesService
             .createQuery()
             .includeSlots()
-            .searchById(serviceUuid)
+            .searchByServiceUuid(serviceUuid)
             .getOne();
 
         if (!existingService) {
@@ -150,7 +150,7 @@ export class ServicesController {
 
         const existingService = await this.servicesService
             .createQuery()
-            .searchById(serviceUuid)
+            .searchByServiceUuid(serviceUuid)
             .searchByDeleted(false)
             .getOne();
 

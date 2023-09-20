@@ -8,10 +8,12 @@ import {
     Param,
     Put,
     Query,
+    Request,
     UseGuards,
 } from '@nestjs/common';
 import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
 import { fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
@@ -30,22 +32,25 @@ export class ServiceSlotsController {
     @SkipGuards()
     @Get('')
     async search(
+        @Request() req: RequestModel,
         @Query('userId') userUuid?: string,
         @Query('state') state?: API.ServiceSlotStates,
         @Query('excludeEnded') excludeEnded?: boolean,
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<API.ServiceSlotDto[]> {
-        let serviceSlotQuery = this.serviceSlotsService.createQuery()
+        const serviceSlotQuery = this.serviceSlotsService.createQuery();
+        const reqUserId = req.user?.uuid;
+        if (reqUserId === userUuid ? serviceSlotQuery.searchByUserUuid(userUuid) : null) {
+        }
+        return await serviceSlotQuery
             .excludeEnded(excludeEnded === true)
             .searchByState(state)
             .includeService()
             .includeClient()
             .includeOwner()
             .paginate(offset, limit)
-            .orderBy('createdAt', 'DESC');
-        serviceSlotQuery.searchByUser(userUuid ?? null);
-        return await serviceSlotQuery
+            .orderBy('createdAt', 'DESC')
             .getMany()
             .then((slots) => slots.map(slot => serviceSlotDtoFromEntity(slot, { hideDiscriminator: true })));
     }

@@ -162,21 +162,11 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchByUser(userUuid: string): CustomQueryBuilder {
+    searchByUserUuid(userUuid: string): CustomQueryBuilder {
         if (typeof userUuid === 'string') {
             this.queryBuilder = this.queryBuilder
-                .innerJoinAndMapOne(
-                    'service_slot.client',
-                    User,
-                    'slot_client',
-                    'service_slot.client_user_id = slot_client.id',
-                )
-                .innerJoinAndMapOne(
-                    'service_slot.service_owner',
-                    User,
-                    'slot_service_owner',
-                    'service_slot.service_owner_user_id = slot_service_owner.id',
-                )
+                .leftJoinAndSelect('service_slot.client', 'slot_client')
+                .leftJoinAndSelect('service_slot.service_owner', 'slot_service_owner')
                 .andWhere(
                     new Brackets(queryBuilder => {
                         queryBuilder.where('slot_client.uuid = :userUuid', { userUuid })
