@@ -1,8 +1,7 @@
 // auth.controller.ts
-import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { DiscordAuthGuard } from './discord/discord.guard';
-import { JwtAuthGuard } from './jwt/jwt.guard';
 import { RequestModel } from './request.model';
 
 @Controller('auth')
