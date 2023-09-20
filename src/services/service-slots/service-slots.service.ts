@@ -80,12 +80,6 @@ export class ServiceSlotsService {
 
             const slot = await slotQueryBuilder
                 .leftJoinAndSelect('service_slot.service', 'service')
-                .innerJoinAndMapOne(
-                    'service_slot.client',
-                    User,
-                    'slot_client',
-                    'service_slot.client_user_id = slot_client.id',
-                )
                 .where('service_slot.uuid = :slotUuid', { slotUuid })
                 .getOne();
 
