@@ -27,7 +27,6 @@ const STATE_TRANSITIONS_MAP = {
 export class ServiceSlotsController {
     constructor(private readonly serviceSlotsService: ServiceSlotsService) {
     }
-
     @SkipGuards()
     @Get('')
     async search(
@@ -37,29 +36,29 @@ export class ServiceSlotsController {
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<API.ServiceSlotDto[]> {
-        let serviceSlotQuery = this.serviceSlotsService.createQuery();
-        serviceSlotQuery = serviceSlotQuery.searchByUser(userUuid ?? null);
-        return await serviceSlotQuery
+        let serviceSlotQuery = this.serviceSlotsService.createQuery()
             .excludeEnded(excludeEnded === true)
             .searchByState(state)
             .includeService()
             .includeClient()
             .includeOwner()
             .paginate(offset, limit)
-            .orderBy('createdAt', 'DESC')
+            .orderBy('createdAt', 'DESC');
+        serviceSlotQuery.searchByUser(userUuid ?? null);
+        return await serviceSlotQuery
             .getMany()
             .then((slots) => slots.map(slot => serviceSlotDtoFromEntity(slot, { hideDiscriminator: true })));
     }
 
     @Put(':id/state/:newState')
     async updateState(
-        @Param('id') id: number,
+        @Param('id') slotUuid: string,
         @Param('newState') newState: API.ServiceSlotStates,
     ): Promise<API.ServiceSlotDto> {
-        const slot = await this.serviceSlotsService.findById(id);
+        const slot = await this.serviceSlotsService.findById(slotUuid);
 
         if (!slot) {
-            throw new NotFoundException(`Service slot with ID ${id} not found`);
+            throw new NotFoundException(`Service slot with ID ${slotUuid} not found`);
         }
 
         if (!STATE_TRANSITIONS_MAP[slot.state]?.includes(newState)) {
@@ -67,7 +66,7 @@ export class ServiceSlotsController {
         }
 
         try {
-            return await this.serviceSlotsService.updateServiceSlotState(id, newState)
+            return await this.serviceSlotsService.updateServiceSlotState(slotUuid, newState)
                 .then((slot) => serviceSlotDtoFromEntity(slot));
         } catch (error) {
             // Check if error is a SERVICE_SLOT_ERROR_CODES

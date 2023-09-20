@@ -12,7 +12,7 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
             new TableColumn({
                 name: 'uuid',
                 type: 'varchar',
-                isNullable: false,
+                isNullable: true,
                 length: '36',
             }),
         );
@@ -21,7 +21,7 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
             new TableColumn({
                 name: 'uuid',
                 type: 'varchar',
-                isNullable: false,
+                isNullable: true,
                 length: '36',
             }),
         );
@@ -30,7 +30,7 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
             new TableColumn({
                 name: 'uuid',
                 type: 'varchar',
-                isNullable: false,
+                isNullable: true,
                 length: '36',
             }),
         );
@@ -39,7 +39,7 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
             new TableColumn({
                 name: 'uuid',
                 type: 'varchar',
-                isNullable: false,
+                isNullable: true,
                 length: '36',
             }),
         );

@@ -28,10 +28,10 @@ export const fromEntity = (entity: ServiceSlot, options: FromEntityOptions = {})
         state,
         updatedAt,
         client: clientDto,
-        clientUserId: clientDto.id,
+        clientUserId: clientDto?.id,
         serviceOwner: serviceOwnerDto,
-        serviceOwnerUserId: serviceOwnerDto.id,
+        serviceOwnerUserId: serviceOwnerDto?.id,
         service: serviceDto,
-        serviceId: serviceDto.id,
+        serviceId: serviceDto?.id,
     };
 };
