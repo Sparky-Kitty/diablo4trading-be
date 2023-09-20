@@ -1,9 +1,9 @@
 // auth.controller.ts
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { fromEntity as userDtoFromEntity } from './../users/user.dto';
 import { DiscordAuthGuard } from './discord/discord.guard';
 import { RequestModel } from './request.model';
-import { fromEntity as userDtoFromEntity } from './../users/user.dto'
 
 @Controller('auth')
 export class AuthController {

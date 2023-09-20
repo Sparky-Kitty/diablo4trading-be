@@ -108,8 +108,8 @@ export class ServiceSlotsService {
                     .where('client_user_id = :clientId', { clientId: slot.client.id })
                     .andWhere('service_slot.state IN (:...states)', {
                         states: [API.ServiceSlotStates.Pending, API.ServiceSlotStates.Accepted],
-                    })
-                console.log(temp.getSql())
+                    });
+                console.log(temp.getSql());
                 await temp.execute();
             }
 
