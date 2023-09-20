@@ -49,7 +49,6 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
         const users = await userRepository.find();
         for (const user of users) {
             user.uuid = uuid();
-            console.log(user.uuid);
             await userRepository.update(user.id, user);
         }
 
@@ -57,7 +56,6 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
         const services = await serviceRepository.find();
         for (const service of services) {
             service.uuid = uuid();
-            console.log(service.uuid);
             await serviceRepository.update(service.id, service);
         }
 
@@ -65,7 +63,6 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
         const slots = await serviceSlotRepository.find();
         for (const slot of slots) {
             slot.uuid = uuid();
-            console.log(slot.uuid);
             await serviceSlotRepository.update(slot.id, slot);
         }
 
@@ -73,7 +70,6 @@ export class AddUuidColumnToTables1695160701399 implements MigrationInterface {
         const userVouches = await userVouchRepository.find();
         for (const userVouch of userVouches) {
             userVouch.uuid = uuid();
-            console.log(userVouch.uuid);
             await userVouchRepository.update(userVouch.id, userVouch);
         }
 

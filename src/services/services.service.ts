@@ -130,7 +130,6 @@ class CustomQueryBuilder {
 
     searchByUserId(userUuid?: string): CustomQueryBuilder {
         if (typeof userUuid === 'string') {
-            console.log('Inputted User ID: ' + userUuid);
             this.queryBuilder = this.queryBuilder
                 .innerJoin('service.user', 'service_user')
                 .andWhere('service_user.uuid = :userUuid', { userUuid });

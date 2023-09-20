@@ -48,7 +48,6 @@ export class ServicesController {
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<API.ServiceDto[]> {
-        console.log(userUuid);
         return await this.servicesService
             .createQuery()
             .withUser()
