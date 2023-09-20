@@ -34,17 +34,17 @@ export class ServicesService {
         return await this.serviceRepository.save(service);
     }
 
-    async updateService(id: number, dto: Partial<Service>): Promise<Service> {
-        const existingService = await this.serviceRepository.findOneBy({ id });
+    async updateService(uuid: string, dto: Partial<Service>): Promise<Service> {
+        const existingService = await this.serviceRepository.findOneBy({ uuid });
         if (!existingService) {
             throw new ServiceResponseException(
                 SERVICE_ERROR_CODES.SERVICE_NOT_FOUND,
-                `Service with ID ${id} not found`,
+                `Service with ID ${uuid} not found`,
             );
         }
 
-        await this.serviceRepository.update(id, dto);
-        return await this.serviceRepository.findOneBy({ id });
+        await this.serviceRepository.update(uuid, dto);
+        return await this.serviceRepository.findOneBy({ uuid });
     }
 
     async deleteService(id: number): Promise<void> {
@@ -93,8 +93,8 @@ class CustomQueryBuilder {
         return this;
     }
 
-    searchById(id: number): CustomQueryBuilder {
-        this.queryBuilder = this.queryBuilder.andWhere('service.id = :id', { id });
+    searchById(serviceUuid: string): CustomQueryBuilder {
+        this.queryBuilder = this.queryBuilder.andWhere('service.uuid = :serviceUuid', { serviceUuid });
         return this;
     }
 

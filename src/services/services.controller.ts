@@ -83,21 +83,21 @@ export class ServicesController {
 
     @Put(':id')
     async update(
-        @Param('id') id: number,
+        @Param('id') serviceUuid: string,
         @Body() updateDto: Partial<Service>,
     ): Promise<API.ServiceDto> {
         const existingService = await this.servicesService
             .createQuery()
             .includeSlots()
-            .searchById(id)
+            .searchById(serviceUuid)
             .getOne();
 
         if (!existingService) {
-            throw new NotFoundException(`Service with ID ${id} not found`);
+            throw new NotFoundException(`Service with ID ${serviceUuid} not found`);
         }
 
         try {
-            return await this.servicesService.updateService(id, updateDto).then(service =>
+            return await this.servicesService.updateService(serviceUuid, updateDto).then(service =>
                 serviceDtoFromEntity(service, { hideDiscriminator: true })
             );
         } catch (error) {
@@ -143,19 +143,19 @@ export class ServicesController {
 
     @Post(':id/claim-slot')
     async claimSlot(
-        @Param('id') id: number,
+        @Param('id') serviceUuid: string,
         @Request() req: RequestModel,
     ): Promise<API.ServiceSlotDto> {
         const userId = req.user.id;
 
         const existingService = await this.servicesService
             .createQuery()
-            .searchById(id)
+            .searchById(serviceUuid)
             .searchByDeleted(false)
             .getOne();
 
         if (!existingService) {
-            throw new NotFoundException(`Service with ID ${id} not found`);
+            throw new NotFoundException(`Service with ID ${serviceUuid} not found`);
         }
 
         // Creating a new ServiceSlot

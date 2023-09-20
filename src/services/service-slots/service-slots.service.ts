@@ -80,7 +80,12 @@ export class ServiceSlotsService {
 
             const slot = await slotQueryBuilder
                 .leftJoinAndSelect('service_slot.service', 'service')
-                .leftJoinAndSelect('service_slot.client', 'client')
+                .innerJoinAndMapOne(
+                    'service_slot.client',
+                    User,
+                    'slot_client',
+                    'service_slot.client_user_id = slot_client.id',
+                )
                 .where('service_slot.uuid = :slotUuid', { slotUuid })
                 .getOne();
 
@@ -90,8 +95,7 @@ export class ServiceSlotsService {
 
             if (state === API.ServiceSlotStates.Accepted) {
                 const acceptedSlotsCount = await slotQueryBuilder
-                    .leftJoinAndSelect('service_slot.service', 'service')
-                    .where('service.uuid = :serviceId', { serviceId: slot.service.uuid })
+                    .where('service.uuid = :serviceId', { serviceId: slot.service?.uuid })
                     .andWhere('service_slot.state = :state', { state: API.ServiceSlotStates.Accepted })
                     .getCount();
 
@@ -104,15 +108,15 @@ export class ServiceSlotsService {
 
                 // Update all the CLIENT's slots to REJECTED if they have state PENDING or ACCEPTED
                 // TODO - business logic might be questionable here
-                await slotQueryBuilder
-                    .leftJoinAndSelect('service_slot.client', 'service_client')
+                const temp = slotQueryBuilder
                     .update()
                     .set({ state: API.ServiceSlotStates.Rejected })
-                    .where('service_client.uuid = :userUuid', { userUuid: slot.client.uuid })
+                    .where('client_user_id = :clientId', { clientId: slot.client.id })
                     .andWhere('service_slot.state IN (:...states)', {
                         states: [API.ServiceSlotStates.Pending, API.ServiceSlotStates.Accepted],
                     })
-                    .execute();
+                console.log(temp.getSql())
+                await temp.execute();
             }
 
             await slotQueryBuilder
