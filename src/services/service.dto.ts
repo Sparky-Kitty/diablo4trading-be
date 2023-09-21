@@ -37,12 +37,9 @@ export const fromEntity = (entity: Service, options: FromEntityOptions = {}): AP
             )
         );
 
-    const serverTypes = Object.values(Game.ServerType);
-    const serverType = serverTypes.find(type => type.toString());
-
     return {
         id: uuid,
-        realmType: serverType,
+        realmType,
         title,
         content,
         userId: userDto?.id,
