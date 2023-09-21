@@ -1,3 +1,4 @@
+import { Game } from '@diablosnaps/common';
 import { API } from '@sanctuaryteam/shared';
 import { fromEntity as userDtoFromEntity } from '../users/user.dto';
 import { fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto'; // Update this path as needed
@@ -36,18 +37,21 @@ export const fromEntity = (entity: Service, options: FromEntityOptions = {}): AP
             )
         );
 
+    const serverTypes = Object.values(Game.ServerType);
+    const serverType = serverTypes.find(type => type.toString());
+
     return {
         id: uuid,
-        realmType,
+        realmType: serverType,
         title,
         content,
         userId: userDto?.id,
         tags,
         maxAcceptedSlots,
         slots: serviceSlotsDto,
-        bumpedAt,
-        createdAt,
-        updatedAt,
+        bumpedAt: bumpedAt.toISOString(),
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
         updatedBy,
         deleted,
         user: userDto,
