@@ -1,8 +1,8 @@
+import { Game } from '@diablosnaps/common';
 import { API } from '@sanctuaryteam/shared';
 import { fromEntity as userDtoFromEntity } from '../users/user.dto';
 import { fromEntity as serviceSlotDtoFromEntity } from './service-slots/service-slots.dto'; // Update this path as needed
 import { Service } from './services.entity';
-import { Game } from '@diablosnaps/common';
 
 interface FromEntityOptions {
     hideDiscriminator?: boolean;

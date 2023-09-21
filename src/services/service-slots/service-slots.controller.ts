@@ -15,10 +15,10 @@ import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { RequestModel } from 'src/auth/request.model';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
+import { ServiceResponseException } from 'src/common/exceptions';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
 import { fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
-import { ServiceResponseException } from 'src/common/exceptions';
 
 const STATE_TRANSITIONS_MAP = {
     [API.ServiceSlotStates.Pending]: [API.ServiceSlotStates.Accepted, API.ServiceSlotStates.Rejected],
