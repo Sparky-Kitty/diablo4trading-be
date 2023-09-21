@@ -18,6 +18,7 @@ import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { OptionalParseIntPipe } from '../../pipes/optional-parse-int-pipe';
 import { fromEntity as serviceSlotDtoFromEntity } from './service-slots.dto';
 import { SERVICE_SLOT_ERROR_CODES, ServiceSlotsService } from './service-slots.service';
+import { ServiceResponseException } from 'src/common/exceptions';
 
 const STATE_TRANSITIONS_MAP = {
     [API.ServiceSlotStates.Pending]: [API.ServiceSlotStates.Accepted, API.ServiceSlotStates.Rejected],
@@ -77,14 +78,16 @@ export class ServiceSlotsController {
             return await this.serviceSlotsService.updateServiceSlotState(slotUuid, newState)
                 .then((slot) => serviceSlotDtoFromEntity(slot));
         } catch (error) {
-            // Check if error is a SERVICE_SLOT_ERROR_CODES
-            if (error?.code && error.code in SERVICE_SLOT_ERROR_CODES) {
-                throw new BadRequestException(error.message);
+            if (error instanceof ServiceResponseException) {
+                // Check if error is a SERVICE_SLOT_ERROR_CODES
+                if (error?.code && error.code in SERVICE_SLOT_ERROR_CODES) {
+                    throw new BadRequestException(error.message);
+                }
+                throw new HttpException(
+                    error?.message || 'Unknown error',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
             }
-            throw new HttpException(
-                error?.message || 'Unknown error',
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            );
         }
     }
 }

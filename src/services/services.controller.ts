@@ -25,6 +25,7 @@ import { ServiceSlotsService } from './service-slots/service-slots.service';
 import { fromEntity as serviceDtoFromEntity } from './service.dto';
 import { Service } from './services.entity';
 import { SERVICE_ERROR_CODES, ServicesService } from './services.service';
+import { ServiceResponseException } from 'src/common/exceptions';
 
 const MAX_SERVICE_COUNT = 3;
 
@@ -101,10 +102,12 @@ export class ServicesController {
                 serviceDtoFromEntity(service, { hideDiscriminator: true })
             );
         } catch (error) {
-            throw new HttpException(
-                error?.message || 'Unknown error',
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            );
+            if (error instanceof ServiceResponseException) {
+                throw new HttpException(
+                    error?.message || 'Unknown error',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
+            }
         }
     }
 
@@ -128,15 +131,17 @@ export class ServicesController {
         try {
             await this.servicesService.bumpService(id);
         } catch (error) {
-            if (error?.code === SERVICE_ERROR_CODES.BUMP_TOO_SOON) {
-                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-            } else if (error?.code === SERVICE_ERROR_CODES.SERVICE_NOT_FOUND) {
-                throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-            } else {
-                throw new HttpException(
-                    'Unknown error',
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                );
+            if (error instanceof ServiceResponseException) {
+                if (error.code === SERVICE_ERROR_CODES.BUMP_TOO_SOON) {
+                    throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                } else if (error.code === SERVICE_ERROR_CODES.SERVICE_NOT_FOUND) {
+                    throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+                } else {
+                    throw new HttpException(
+                        'Unknown error',
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                    );
+                }
             }
         }
     }

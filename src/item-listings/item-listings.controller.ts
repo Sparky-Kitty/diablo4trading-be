@@ -21,6 +21,7 @@ import { ItemListingBid } from './item-listing-bids/item-listing-bid.entity';
 import { BID_ERROR_CODES, BidCreationData, ItemListingBidsService } from './item-listing-bids/item-listing-bid.service';
 import { ItemListing } from './item-listing.entity';
 import { ItemListingsService, TradePostCreateData } from './item-listings.service';
+import { ServiceResponseException } from 'src/common/exceptions';
 
 @UseGuards(JwtAuthGuard)
 @Controller('listings')
@@ -129,11 +130,13 @@ export class ItemListingsController implements OnModuleInit {
         try {
             return await this.itemListingBidsService.createBid(body);
         } catch (error) {
-            if (error?.code in BID_ERROR_CODES) {
-                throw new BadRequestException({
-                    errorCode: error.code,
-                    message: error.message,
-                });
+            if (error instanceof ServiceResponseException) {
+                if (error?.code in BID_ERROR_CODES) {
+                    throw new BadRequestException({
+                        errorCode: error.code,
+                        message: error.message,
+                    });
+                }
             }
 
             throw new InternalServerErrorException('An unexpected error occurred');

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { API } from '@sanctuaryteam/shared';
 import { Repository } from 'typeorm';
 import { ServiceSlot } from './service-slots.entity';
+import { ServiceResponseException } from 'src/common/exceptions';
 
 // 24 hours
 const EXPIRATION_TIME_SECONDS = 60 * 60 * 24;
@@ -56,7 +57,9 @@ export class ServiceSlotsCronService {
                 this.logger.debug(`Successfully updated ${outdatedServiceSlots.length} outdated service slots.`);
             });
         } catch (error) {
-            this.logger.error('Error updating outdated service slots', error.stack);
+            if (error instanceof ServiceResponseException) {
+                this.logger.error('Error updating outdated service slots', error.stack);
+            }
         }
     }
 }
