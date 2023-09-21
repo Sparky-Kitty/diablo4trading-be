@@ -39,7 +39,7 @@ export class ServiceSlotsController {
         @Query('offset', OptionalParseIntPipe) offset?: number,
         @Query('limit', OptionalParseIntPipe) limit?: number,
     ): Promise<API.ServiceSlotDto[]> {
-        const serviceSlotQuery = this.serviceSlotsService.createQuery();
+        let serviceSlotQuery = this.serviceSlotsService.createQuery();
         const reqUserId = req.user?.uuid;
         reqUserId === userUuid && serviceSlotQuery.searchByUserUuid(userUuid);
         return await serviceSlotQuery
@@ -51,7 +51,11 @@ export class ServiceSlotsController {
             .paginate(offset, limit)
             .orderBy('createdAt', 'DESC')
             .getMany()
-            .then((slots) => slots.map(slot => serviceSlotDtoFromEntity(slot, { hideDiscriminator: true })));
+            .then((slots) =>
+                slots.map(slot =>
+                    serviceSlotDtoFromEntity(slot, { hideDiscriminator: slot.state === API.ServiceSlotStates.Pending })
+                )
+            );
     }
 
     @Put(':id/state/:newState')

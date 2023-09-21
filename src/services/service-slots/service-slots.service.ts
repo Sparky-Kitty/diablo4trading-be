@@ -61,8 +61,6 @@ export class ServiceSlotsService {
 
     async updateServiceSlotState(slotUuid: string, state: API.ServiceSlotStates): Promise<ServiceSlot> {
         // Check the validity of the state before proceeding
-        console.log(slotUuid);
-
         if (!Object.values(API.ServiceSlotStates).includes(state)) {
             throw new ServiceResponseException(
                 SERVICE_SLOT_ERROR_CODES.INVALID_STATE,
@@ -89,7 +87,7 @@ export class ServiceSlotsService {
 
             if (state === API.ServiceSlotStates.Accepted) {
                 const acceptedSlotsCount = await slotQueryBuilder
-                    .where('service.uuid = :serviceId', { serviceId: slot.service?.uuid })
+                    .where('service.uuid = :serviceId', { serviceId: slot.service.uuid })
                     .andWhere('service_slot.state = :state', { state: API.ServiceSlotStates.Accepted })
                     .getCount();
 
@@ -165,12 +163,10 @@ class CustomQueryBuilder {
     searchByUserUuid(userUuid: string): CustomQueryBuilder {
         if (typeof userUuid === 'string') {
             this.queryBuilder = this.queryBuilder
-                .leftJoinAndSelect('service_slot.client', 'slot_client')
-                .leftJoinAndSelect('service_slot.service_owner', 'slot_service_owner')
-                .andWhere(
+                .where(
                     new Brackets(queryBuilder => {
-                        queryBuilder.where('slot_client.uuid = :userUuid', { userUuid })
-                            .orWhere('slot_service_owner.uuid = :userUuid', { userUuid });
+                        queryBuilder.where('client.uuid = :userUuid', { userUuid })
+                            .orWhere('serviceOwner.uuid = :userUuid', { userUuid });
                     }),
                 );
         }

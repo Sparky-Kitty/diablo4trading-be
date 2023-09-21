@@ -30,7 +30,11 @@ export const fromEntity = (entity: Service, options: FromEntityOptions = {}): AP
     const serviceSlotsDto: API.ServiceSlotDto[] = [];
 
     Array.isArray(slots)
-        && slots.forEach(slot => serviceSlotsDto.push(serviceSlotDtoFromEntity(slot, { hideDiscriminator })));
+        && slots.forEach(slot =>
+            serviceSlotsDto.push(
+                serviceSlotDtoFromEntity(slot, { hideDiscriminator }),
+            )
+        );
 
     return {
         id: uuid,
