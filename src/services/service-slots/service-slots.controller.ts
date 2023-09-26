@@ -70,8 +70,6 @@ export class ServiceSlotsController {
         if (!slot) {
             throw new NotFoundException(`Service slot with ID ${slotUuid} not found`);
         }
-        console.log("State: " + slot.state)
-        console.log("Map: " + STATE_TRANSITIONS_MAP[slot.state])
 
         if (!STATE_TRANSITIONS_MAP[slot.state]?.includes(newState)) {
             throw new BadRequestException('Invalid state transition.');

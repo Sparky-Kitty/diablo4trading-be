@@ -34,9 +34,11 @@ export class UserVouchService {
     private async referenceExists(referenceType: 'ItemListing' | 'Service', referenceId: number): Promise<boolean> {
         switch (referenceType) {
             case 'ItemListing':
-                return this.itemListingRepository.exist({ where: { id: referenceId } });
+                return await this.itemListingRepository.exist({
+                    where: { id: referenceId },
+                });
             case 'Service':
-                return this.serviceRepository.exist({
+                return await this.serviceRepository.exist({
                     where: { id: referenceId },
                 });
             default:
@@ -47,22 +49,32 @@ export class UserVouchService {
     async createVouch(
         referenceType: 'ItemListing' | 'Service',
         referenceId: number,
-        recipient: User,
-        author: User,
+        recipientId: number,
+        authorId: number,
     ): Promise<UserVouch> {
         if (!await this.referenceExists(referenceType, referenceId)) {
             throw new NotFoundException(`The reference ${referenceType} with ID ${referenceId} does not exist`);
         }
+        let userVouch: UserVouch;
 
-        const userVouch = this.userVouchRepository.create({
-            referenceType,
-            referenceId,
-            recipient,
-            author,
-            state: UserVouchState.Open,
-        });
+        console.log('pre-vouch create service');
+        try {
+            userVouch = this.userVouchRepository.create({
+                referenceType,
+                referenceId,
+                recipientId,
+                authorId,
+                isPositive: true,
+                rating: 5,
+                state: UserVouchState.Open,
+                description: '',
+            });
+            console.log('userVouch: ' + JSON.stringify(userVouch));
+        } catch (error) {
+            console.log('Error: ' + error);
+        }
 
-        return this.userVouchRepository.save(userVouch);
+        return await this.userVouchRepository.save(userVouch);
     }
 
     async updateUserVouchCalculations(updatedVouch: UserVouch): Promise<void> {

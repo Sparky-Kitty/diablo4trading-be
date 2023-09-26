@@ -10,10 +10,24 @@ import { UserNotificationController } from './user-notification.controller';
 import { UserNotificationService } from './user-notification.service';
 import { User } from '../users.entity';
 import { UsersService } from '../users.service';
+import { ServicesService } from 'src/services/services.service';
+import { ItemListingsService } from 'src/item-listings/item-listings.service';
+import { DiabloItemService } from 'src/diablo-items/diablo-item.service';
+import { DiabloItemAffix } from 'src/diablo-items/diablo-item-affix.entity';
+import { DiabloItem } from 'src/diablo-items/diablo-item.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Service, ServiceSlot, User, UserVouch, UserVouchCalculation, ItemListing])],
-    providers: [UserNotificationService, UserVouchService, UsersService],
+    imports: [
+        TypeOrmModule.forFeature([DiabloItemAffix], 'memory'),
+        TypeOrmModule.forFeature([Service, ServiceSlot, User, UserVouch, UserVouchCalculation, ItemListing, DiabloItem, DiabloItemAffix]),
+    ],
+    providers: [UserNotificationService,
+        UserVouchService,
+        UsersService,
+        ServicesService,
+        ItemListingsService,
+        DiabloItemService,
+        ],
     controllers: [UserNotificationController],
 })
 export class UserNotificationModule {}

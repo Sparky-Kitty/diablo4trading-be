@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ItemListingBid } from 'src/item-listings/item-listing-bids/item-listing-bid.entity';
+import { ItemListing } from 'src/item-listings/item-listing.entity';
 import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
+import { Service } from 'src/services/services.entity';
+import { ServicesService } from 'src/services/services.service';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
-import { ItemListing } from 'src/item-listings/item-listing.entity';
-import { Service } from 'src/services/services.entity';
 
 @Injectable()
 export class UserNotificationService {
@@ -14,6 +15,7 @@ export class UserNotificationService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Service) public readonly serviceRepository: Repository<Service>,
         @InjectRepository(ItemListing) public readonly itemListingRepository: Repository<ItemListing>,
+        private readonly servicesService: ServicesService,
     ) {
     }
 
@@ -25,7 +27,7 @@ export class UserNotificationService {
 }
 
 class CustomQueryBuilder<T> {
-    private readonly serviceRepository: Repository<Service>;
+    // private readonly serviceRepository: Repository<Service>;
     private readonly itemListingRepository: Repository<ItemListing>;
     private queryBuilder: SelectQueryBuilder<T>;
 
@@ -33,13 +35,16 @@ class CustomQueryBuilder<T> {
     constructor(queryBuilder: SelectQueryBuilder<T>, private repository?: Repository<T>) {
         this.queryBuilder = queryBuilder;
     }
-    
-    async findItemListingById(itemListingRepository: Repository<ItemListing>, id: number): Promise<ItemListing | undefined> {
-      return itemListingRepository.findOne({ where: { id } });
+
+    async findItemListingById(
+        itemListingRepository: Repository<ItemListing>,
+        id: number,
+    ): Promise<ItemListing | undefined> {
+        return itemListingRepository.findOne({ where: { id } });
     }
-  
+
     async findServiceById(serviceRepository: Repository<Service>, id: number): Promise<Service | undefined> {
-      return serviceRepository.findOne({ where: { id } });
+        return serviceRepository.findOne({ where: { id } });
     }
 
     async getMany(): Promise<T[]> {
@@ -53,9 +58,9 @@ class CustomQueryBuilder<T> {
             .leftJoinAndSelect('service_slot.serviceOwner', 'serviceOwner')
             .leftJoinAndSelect('service_slot.service', 'service')
             .where('client.uuid = :userUuid OR serviceOwner.uuid = :userUuid', { userUuid });
-    
+
         const customQueryBuilder = new CustomQueryBuilder<ServiceSlot>(serviceSlotQueryBuilder, serviceSlotRepository);
-    
+
         return await customQueryBuilder.getMany();
     }
 
@@ -68,40 +73,44 @@ class CustomQueryBuilder<T> {
     //         .where('author.uuid = :userUuid OR recipient.uuid = :userUuid', { userUuid })
     //         .andWhere('(user_vouch.referenceType = :itemListingType AND reference.id = user_vouch.referenceId) OR (user_vouch.referenceType = :serviceType AND reference.id = user_vouch.referenceId)', { itemListingType: 'ItemListing', serviceType: 'Service' });
     //     const customQueryBuilder = new CustomQueryBuilder<UserVouch>(userVouchQueryBuilder, userVouchRepository);
-    
+
     //     return await customQueryBuilder.getMany();
     // }
-    async getVouchesByUserUuid(userVouchRepository: Repository<UserVouch>, userUuid?: string) {
+    async getVouchesByUserUuid(userVouchRepository: Repository<UserVouch>, serviceRepository: Repository<Service>, userUuid?: string) {
+        const serviceQueryBuilder = serviceRepository.createQueryBuilder('service');
         // Fetch UserVouch records
         const userVouches = await userVouchRepository.createQueryBuilder('user_vouch')
             .leftJoinAndSelect('user_vouch.author', 'author')
             .leftJoinAndSelect('user_vouch.recipient', 'recipient')
             .where('author.uuid = :userUuid OR recipient.uuid = :userUuid', { userUuid })
             .getMany();
-    
+
         // Load reference data based on referenceType
         for (const vouch of userVouches) {
             if (vouch.referenceType === 'ItemListing') {
-                vouch.reference = await this.findItemListingById(this.itemListingRepository, vouch.referenceId)
+                const itemListing = await this.itemListingRepository.findOneBy({ id: vouch.referenceId });
+                vouch.reference = itemListing;
             } else if (vouch.referenceType === 'Service') {
-                vouch.reference = await this.findServiceById(this.serviceRepository, vouch.referenceId)
-                // vouch.reference = await this.serviceRepository.createQueryBuilder('service')
-                //     .where('service.id = :id', { id: vouch.referenceId })
-                //     .getOne();
+                const service = await serviceRepository.findOneBy({ id: vouch.referenceId })
+                // const service = await this.serviceRepository.findOneBy({ id: vouch.referenceId });
+                vouch.reference = service;
             }
         }
-    
+
         return userVouches;
     }
-    
+
     // Usage example for bids
     async getBidsByUserUuid(itemListingBidRepository: Repository<ItemListingBid>, userUuid?: string) {
         const itemListingBidQueryBuilder = itemListingBidRepository.createQueryBuilder('item_listing_bid')
             .leftJoinAndSelect('item_listing_bid.user', 'bid_user')
             .where('bid_user.uuid = :userUuid', { userUuid });
-    
-        const customQueryBuilder = new CustomQueryBuilder<ItemListingBid>(itemListingBidQueryBuilder, itemListingBidRepository);
-    
+
+        const customQueryBuilder = new CustomQueryBuilder<ItemListingBid>(
+            itemListingBidQueryBuilder,
+            itemListingBidRepository,
+        );
+
         return await customQueryBuilder.getMany();
     }
 }

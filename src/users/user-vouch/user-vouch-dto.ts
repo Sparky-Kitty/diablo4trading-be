@@ -1,10 +1,10 @@
 import { API } from '@sanctuaryteam/shared';
-import { fromEntity as userDtoFromEntity } from './../user.dto';
+import { ItemListing } from 'src/item-listings/item-listing.entity';
+import { Service } from 'src/services/services.entity';
 import { fromEntity as serviceDtoFromEntity } from './../../services/service.dto';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
-import { Service } from 'src/services/services.entity';
+import { fromEntity as userDtoFromEntity } from './../user.dto';
 import { UserVouchState } from './user-vouch-state.enum';
-import { ItemListing } from 'src/item-listings/item-listing.entity';
 
 export interface UserVouchDto {
     id: string;
@@ -34,15 +34,14 @@ export const fromEntity = (entity: UserVouch, options: FromEntityOptions = {}): 
         rating,
         description,
         createdAt,
-    } = entity
+    } = entity;
 
     const { hideDiscriminator } = options;
     const recipientDto = recipient && userDtoFromEntity(recipient, { hideDiscriminator });
     // const referenceDto = reference instanceof Service && serviceDtoFromEntity(reference, { hideDiscriminator });
     const referenceTypeString = reference instanceof Service ? 'Service' : 'ItemListing';
     const referenceDto = reference instanceof Service && serviceDtoFromEntity(reference, { hideDiscriminator: false });
-    
-    
+
     return {
         id: uuid,
         recipient: recipientDto,
