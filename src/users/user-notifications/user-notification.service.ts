@@ -81,12 +81,11 @@ class CustomQueryBuilder<T> {
         serviceRepository: Repository<Service>,
         userUuid?: string,
     ) {
-        const serviceQueryBuilder = serviceRepository.createQueryBuilder('service');
+        // const serviceQueryBuilder = serviceRepository.createQueryBuilder('service');
         // Fetch UserVouch records
         const userVouches = await userVouchRepository.createQueryBuilder('user_vouch')
-            .leftJoinAndSelect('user_vouch.author', 'author')
             .leftJoinAndSelect('user_vouch.recipient', 'recipient')
-            .where('author.uuid = :userUuid OR recipient.uuid = :userUuid', { userUuid })
+            .where('recipient.uuid = :userUuid', { userUuid })
             .getMany();
 
         // Load reference data based on referenceType
@@ -96,7 +95,6 @@ class CustomQueryBuilder<T> {
                 vouch.reference = itemListing;
             } else if (vouch.referenceType === 'Service') {
                 const service = await serviceRepository.findOneBy({ id: vouch.referenceId });
-                // const service = await this.serviceRepository.findOneBy({ id: vouch.referenceId });
                 vouch.reference = service;
             }
         }

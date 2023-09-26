@@ -56,8 +56,6 @@ export class UserVouchService {
             throw new NotFoundException(`The reference ${referenceType} with ID ${referenceId} does not exist`);
         }
         let userVouch: UserVouch;
-
-        console.log('pre-vouch create service');
         try {
             userVouch = this.userVouchRepository.create({
                 referenceType,
@@ -69,7 +67,6 @@ export class UserVouchService {
                 state: UserVouchState.Open,
                 description: '',
             });
-            console.log('userVouch: ' + JSON.stringify(userVouch));
         } catch (error) {
             console.log('Error: ' + error);
         }

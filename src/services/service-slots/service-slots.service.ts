@@ -87,15 +87,12 @@ export class ServiceSlotsService {
             }
 
             if (state === API.ServiceSlotStates.Ended) {
-                console.log('here');
-                // await slotQueryBuilder.execute();
                 await this.userVouchService.createVouch(
                     'Service',
                     slot.serviceId,
                     slot.clientUserId,
                     slot.serviceOwnerUserId,
                 );
-                console.log('here2');
                 await this.userVouchService.createVouch(
                     'Service',
                     slot.serviceId,
@@ -103,7 +100,6 @@ export class ServiceSlotsService {
                     slot.clientUserId,
                 );
                 await slotQueryBuilder.execute();
-                console.log('here3');
             }
 
             if (state === API.ServiceSlotStates.Accepted) {
@@ -137,7 +133,6 @@ export class ServiceSlotsService {
                 .where('service_slot.uuid = :slotUuid', { slotUuid })
                 .execute();
 
-            console.log('here4');
             return await slotQueryBuilder.where('service_slot.uuid = :slotUuid', { slotUuid }).getOne();
         });
     }

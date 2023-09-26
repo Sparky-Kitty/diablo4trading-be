@@ -66,7 +66,7 @@ export const fromEntity = (
                 }
                 break;
             case API.ServiceSlotStates.Ended:
-                break;
+                return null
             default: // API.ServiceSlotStates.Pending
                 if (notification.recipient.id == notification.reference.serviceOwnerUserId) {
                     notification.message = `User with a score of ${clientDto.vouchScore} purchased your service.`;
