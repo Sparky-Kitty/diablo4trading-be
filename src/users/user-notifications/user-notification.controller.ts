@@ -4,13 +4,13 @@ import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { SkipGuards } from 'src/auth/skip-guards.decorator';
 import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
+import { Service } from 'src/services/services.entity';
 import { Repository } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
 import { UsersService } from '../users.service';
 import { fromEntity as userNotificationFromEntity, UserNotificationDto } from './user-notification.dto';
 import { UserNotificationService } from './user-notification.service';
-import { Service } from 'src/services/services.entity';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users/notifications')

@@ -76,7 +76,11 @@ class CustomQueryBuilder<T> {
 
     //     return await customQueryBuilder.getMany();
     // }
-    async getVouchesByUserUuid(userVouchRepository: Repository<UserVouch>, serviceRepository: Repository<Service>, userUuid?: string) {
+    async getVouchesByUserUuid(
+        userVouchRepository: Repository<UserVouch>,
+        serviceRepository: Repository<Service>,
+        userUuid?: string,
+    ) {
         const serviceQueryBuilder = serviceRepository.createQueryBuilder('service');
         // Fetch UserVouch records
         const userVouches = await userVouchRepository.createQueryBuilder('user_vouch')
@@ -91,7 +95,7 @@ class CustomQueryBuilder<T> {
                 const itemListing = await this.itemListingRepository.findOneBy({ id: vouch.referenceId });
                 vouch.reference = itemListing;
             } else if (vouch.referenceType === 'Service') {
-                const service = await serviceRepository.findOneBy({ id: vouch.referenceId })
+                const service = await serviceRepository.findOneBy({ id: vouch.referenceId });
                 // const service = await this.serviceRepository.findOneBy({ id: vouch.referenceId });
                 vouch.reference = service;
             }
