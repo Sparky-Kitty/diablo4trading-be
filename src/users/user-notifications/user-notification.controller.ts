@@ -8,9 +8,9 @@ import { Repository } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
 // import { UsersService } from '../users.service';
+import { RequestModel } from 'src/auth/request.model';
 import { fromEntity as userNotificationFromEntity, UserNotificationDto } from './user-notification.dto';
 import { UserNotificationService } from './user-notification.service';
-import { RequestModel } from 'src/auth/request.model';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users/notifications')
