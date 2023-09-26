@@ -1,10 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { API } from '@sanctuaryteam/shared';
-import { User } from 'src/users/users.entity';
+// import { User } from 'src/users/users.entity';
 import { Brackets, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../../common/exceptions';
 import { ServiceSlot } from './service-slots.entity';
+import { UserVouchService } from 'src/users/user-vouch/user-vouch.service';
 
 export enum SERVICE_SLOT_ERROR_CODES {
     SLOT_NOT_FOUND = 'SLOT_NOT_FOUND',
@@ -18,6 +19,7 @@ export type ServiceSlotCreationData = Pick<ServiceSlot, 'serviceOwnerUserId' | '
 export class ServiceSlotsService {
     constructor(
         @InjectRepository(ServiceSlot) private readonly serviceSlotRepository: Repository<ServiceSlot>,
+        private readonly userVouchService: UserVouchService,
     ) {
     }
 
@@ -108,6 +110,10 @@ export class ServiceSlotsService {
                         states: [API.ServiceSlotStates.Pending, API.ServiceSlotStates.Accepted],
                     })
                     .execute();
+            } else if (state === API.ServiceSlotStates.Ended) {
+                await this.userVouchService.createVouch("Service", slot.serviceId, slot.client, slot.serviceOwner);
+                await this.userVouchService.createVouch("Service", slot.serviceId, slot.serviceOwner, slot.client);
+
             }
 
             await slotQueryBuilder

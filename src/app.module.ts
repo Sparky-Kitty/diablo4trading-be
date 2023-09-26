@@ -9,6 +9,7 @@ import { ItemListingsModule } from './item-listings/item-listings.module';
 import { LoggingMiddleware } from './middleware/request-logging.middleware';
 import { ServiceSlotsModule } from './services/service-slots/service-slots.module';
 import { ServicesModule } from './services/services.module';
+import { UserNotificationModule } from './users/user-notifications/user-notification.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { ServicesModule } from './services/services.module';
         ItemListingsModule,
         ServicesModule,
         ServiceSlotsModule,
+        UserNotificationModule,
     ],
     controllers: [AppController],
     providers: [AppService],
