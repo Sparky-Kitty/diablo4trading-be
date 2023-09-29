@@ -1,8 +1,8 @@
 import { API } from '@sanctuaryteam/shared';
 import { ItemListingBid } from 'src/item-listings/item-listing-bids/item-listing-bid.entity';
-import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
+import { ServiceSlot } from './../../services/service-slots/service-slots.entity';
 import { Service } from 'src/services/services.entity';
-import { fromEntity as serviceSlotDtoFromEntity } from './../../services/service-slots/service-slots.dto'; // Update this path as needed
+import { fromEntity as serviceSlotDtoFromEntity } from './../../services/service-slots/service-slots.dto';
 import { fromEntity as userVouchFromEntity, UserVouchDto } from './../user-vouch/user-vouch-dto';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { fromEntity as userDtoFromEntity } from './../user.dto';
@@ -31,7 +31,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
         const clientDto = client && userDtoFromEntity(client, { hideDiscriminator });
         notification.referenceType = 'ServiceSlot';
         notification.id = entity.uuid;
-        switch (entity.state) {
+        /*switch (entity.state) {
             case API.ServiceSlotStates.Accepted:
                 if (notification.recipient.id == notification.reference.clientUserId) {
                     notification.message = 'Your purhase was approved. Please mark when the service has ended.';
@@ -51,7 +51,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
                     notification.message = `User with a score of ${clientDto.vouchScore} purchased your service.`;
                 }
                 break;
-        }
+        }*/
     }
 
     // UserVouch Related Notifications
@@ -65,7 +65,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
             case 1:
                 break;
             default: // Default Open (0)
-                if (reference instanceof Service) {
+                /*if (reference instanceof Service) {
                     if (recipient.id == notification.reference.userId) {
                         notification.message = `Please rate the client.`;
                     } else {
@@ -78,7 +78,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
                         notification.message = `Please rate the item.`;
                     }
                 }
-                break;
+                break;*/
         }
     }
     return notification;
