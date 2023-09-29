@@ -23,35 +23,15 @@ interface FromEntityOptions {
     hideDiscriminator?: boolean;
 }
 
-export const fromEntity = (
-    entity: UserVouch | ServiceSlot | ItemListingBid,
-    recipient: User,
-    options: FromEntityOptions = {},
-): UserNotificationDto => {
-    const {
-        uuid: serviceSlotUuid,
-        client,
-    } = entity instanceof ServiceSlot && entity;
-
-    const {
-        uuid: userVouchUuid,
-        recipient: userVouchRecipient,
-        reference: userVouchReference,
-    } = entity instanceof UserVouch && entity;
-
+const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid, notification: Partial<UserNotificationDto>, options: FromEntityOptions = {}, client?: User): Partial<UserNotificationDto> => {   
     const { hideDiscriminator } = options;
-    let id: string;
-
-    let notification: Partial<UserNotificationDto> = {
-        recipient: recipient && userDtoFromEntity(recipient),
-    };
 
     // ServiceSlot Related Notifications
     if (entity instanceof ServiceSlot) {
         const clientDto = client && userDtoFromEntity(client, { hideDiscriminator });
         notification.reference = entity && serviceSlotDtoFromEntity(entity, { hideDiscriminator });
         notification.referenceType = 'ServiceSlot';
-        id = serviceSlotUuid;
+        notification.id = entity.uuid;
         switch (entity.state) {
             case API.ServiceSlotStates.Accepted:
                 if (notification.recipient.id == notification.reference.clientUserId) {
@@ -79,10 +59,10 @@ export const fromEntity = (
     if (entity instanceof UserVouch) {
         notification.reference = entity && userVouchFromEntity(entity, { hideDiscriminator: false });
         notification.referenceType = 'UserVouch';
-        id = userVouchUuid;
+        notification.id = entity.uuid;
 
-        const recipient = userVouchRecipient;
-        const reference = userVouchReference;
+        const recipient = entity.recipient;
+        const reference = entity.reference;
         switch (entity.state) {
             case 1:
                 break;
@@ -103,13 +83,31 @@ export const fromEntity = (
                 break;
         }
     }
+}
+
+export const fromEntity = (
+    entity: UserVouch | ServiceSlot | ItemListingBid,
+    recipient: User,
+    options: FromEntityOptions = {},
+): UserNotificationDto => {
+    const {
+        client,
+    } = entity instanceof ServiceSlot && entity;
+
+    const {} = entity instanceof UserVouch && entity;
+
+    let notification: Partial<UserNotificationDto> = {
+        recipient: recipient && userDtoFromEntity(recipient),
+    };
+
+    const fullNotification = referenceNotification(entity, notification, options, client)
 
     return {
-        id,
+        id: fullNotification.id,
         recipient: notification.recipient,
         reference: notification.reference,
         referenceType: notification.referenceType,
         message: notification.message,
-        createdAt: notification.createdAt,
+        createdAt: new Date(),
     };
 };
