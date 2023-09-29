@@ -23,13 +23,12 @@ interface FromEntityOptions {
     hideDiscriminator?: boolean;
 }
 
-const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid, notification: Partial<UserNotificationDto>, options: FromEntityOptions = {}, client?: User): Partial<UserNotificationDto> => {   
+const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid, notification: UserNotificationDto, options: FromEntityOptions = {}, client?: User): UserNotificationDto => {   
     const { hideDiscriminator } = options;
 
     // ServiceSlot Related Notifications
     if (entity instanceof ServiceSlot) {
         const clientDto = client && userDtoFromEntity(client, { hideDiscriminator });
-        notification.reference = entity && serviceSlotDtoFromEntity(entity, { hideDiscriminator });
         notification.referenceType = 'ServiceSlot';
         notification.id = entity.uuid;
         switch (entity.state) {
@@ -56,8 +55,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
     }
 
     // UserVouch Related Notifications
-    if (entity instanceof UserVouch) {
-        notification.reference = entity && userVouchFromEntity(entity, { hideDiscriminator: false });
+    if (entity instanceof UserVouch && notification.reference instanceof UserVouch) {
         notification.referenceType = 'UserVouch';
         notification.id = entity.uuid;
 
@@ -68,7 +66,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
                 break;
             default: // Default Open (0)
                 if (reference instanceof Service) {
-                    if (recipient.id == reference.userId) {
+                    if (recipient.id == notification.reference.userId) {
                         notification.message = `Please rate the client.`;
                     } else {
                         notification.message = `Please rate the service.`;
@@ -83,6 +81,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
                 break;
         }
     }
+    return notification;
 }
 
 export const fromEntity = (
@@ -96,18 +95,52 @@ export const fromEntity = (
 
     const {} = entity instanceof UserVouch && entity;
 
-    let notification: Partial<UserNotificationDto> = {
+    let notification: UserNotificationDto = {
+        id: '',
         recipient: recipient && userDtoFromEntity(recipient),
+        reference: entity instanceof ServiceSlot ? serviceSlotDtoFromEntity(entity, { hideDiscriminator: entity.state === API.ServiceSlotStates.Pending }) : entity instanceof UserVouch && entity && userVouchFromEntity(entity, { hideDiscriminator: false }),
+        referenceType:  'unknown',
+        message: 'null',
+        createdAt: new Date(),
     };
 
-    const fullNotification = referenceNotification(entity, notification, options, client)
+    let fullNotification: UserNotificationDto | null;
+
+    try {
+        fullNotification = referenceNotification(entity, notification, options, client);
+        console.log("Full Notification: " + JSON.stringify(fullNotification));
+
+        if (fullNotification !== null) {
+            return {
+                id: fullNotification.id,
+                recipient: fullNotification.recipient,
+                reference: fullNotification.reference,
+                referenceType: fullNotification.referenceType,
+                message: fullNotification.message,
+                createdAt: fullNotification.createdAt,
+            };
+        } else {
+            // Handle the case where referenceNotification returns null.
+            // You can return a default value or take appropriate action.
+            console.error("Reference notification is null.");
+            // Return a default value or throw an error if necessary.
+        }
+    } catch (error) {
+        // Handle any errors that might occur during the referenceNotification call.
+        // You can log the error or take appropriate action as needed.
+        console.error("Error while creating full notification:", error);
+        // Throw the error if necessary.
+    }
+
+    // const fullNotification = referenceNotification(entity, notification, options, client)
+    // console.log("Full Notifiation: " + fullNotification)
 
     return {
-        id: fullNotification.id,
-        recipient: notification.recipient,
-        reference: notification.reference,
-        referenceType: notification.referenceType,
-        message: notification.message,
-        createdAt: new Date(),
+        id: fullNotification?.id ?? '',
+        recipient: fullNotification.recipient,
+        reference: fullNotification.reference,
+        referenceType: fullNotification.referenceType,
+        message: fullNotification.message,
+        createdAt: fullNotification.createdAt,
     };
 };
