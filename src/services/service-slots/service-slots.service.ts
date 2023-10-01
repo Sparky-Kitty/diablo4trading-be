@@ -1,7 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { API } from '@sanctuaryteam/shared';
-// import { User } from 'src/users/users.entity';
 import { UserVouchService } from 'src/users/user-vouch/user-vouch.service';
 import { Brackets, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import { ServiceResponseException } from '../../common/exceptions';
@@ -150,6 +149,17 @@ class CustomQueryBuilder {
             this.queryBuilder = this.queryBuilder.andWhere(
                 'service_slot.state != :excludedState',
                 { excludedState: API.ServiceSlotStates.Ended },
+            );
+        }
+
+        return this;
+    }
+
+    excludeRejected(exclude: boolean): CustomQueryBuilder {
+        if (exclude) {
+            this.queryBuilder = this.queryBuilder.andWhere(
+                'service_slot.state != :excludedState',
+                { excludedState: API.ServiceSlotStates.Rejected },
             );
         }
 

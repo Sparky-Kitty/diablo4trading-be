@@ -7,10 +7,10 @@ import { Service } from 'src/services/services.entity';
 import { Repository } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
-// import { UsersService } from '../users.service';
 import { RequestModel } from 'src/auth/request.model';
 import { fromEntity as userNotificationFromEntity, UserNotificationDto } from './user-notification.dto';
 import { UserNotificationService } from './user-notification.service';
+import { ServicesService } from 'src/services/services.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users/notifications')
@@ -21,13 +21,11 @@ export class UserNotificationController {
         @InjectRepository(UserVouch) public readonly userVouchRepository: Repository<UserVouch>,
         @InjectRepository(User) public readonly userRepository: Repository<User>,
         private readonly userNotificationService: UserNotificationService,
-        // private readonly usersService: UsersService,
     ) {}
 
     @Get('/')
     async search(@Request() req: RequestModel): Promise<UserNotificationDto[]> {
         const { uuid } = req.user;
-        // const recipient = uuid && await this.usersService.findByUuId(uuid);
 
         const serviceSlotsPromise: Promise<UserNotificationDto[]> = this.userNotificationService
             .createQuery()
@@ -42,9 +40,11 @@ export class UserNotificationController {
 
         const userVouchesPromise: Promise<UserNotificationDto[]> = this.userNotificationService
             .createQuery()
-            .getVouchesByUserUuid(this.userVouchRepository, this.serviceRepository, uuid)
+            .getVouchesByUserUuid(this.userVouchRepository, this.serviceRepository, this.serviceSlotRepository, uuid)
             .then(userVouches =>
-                userVouches.map(vouch => userNotificationFromEntity(vouch, req.user, { hideDiscriminator: false }))
+                userVouches.map(vouch => 
+                    userNotificationFromEntity(vouch.userVouch, req.user, { hideDiscriminator: false }, vouch.reference)
+                ),
             );
 
         const [serviceSlots, userVouches] = await Promise.all([serviceSlotsPromise, userVouchesPromise]);

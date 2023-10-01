@@ -10,6 +10,8 @@ export interface UserVouchDto {
     id: string;
     recipient: API.UserDto;
     recipientId: string;
+    author: API.UserDto;
+    authorId: string;
     reference: API.ServiceDto | ItemListing; // || API.ItemListingDto
     referenceId: string;
     referenceType: string;
@@ -24,12 +26,13 @@ interface FromEntityOptions {
     hideDiscriminator?: boolean;
 }
 
-export const fromEntity = (entity: UserVouch, options: FromEntityOptions = {}): UserVouchDto => {
+export const fromEntity = (entity: UserVouch, reference: Service, options: FromEntityOptions = {}): UserVouchDto => {
     const {
         uuid,
         recipient,
+        author,
         state,
-        reference,
+        referenceType,
         isPositive,
         rating,
         description,
@@ -38,17 +41,18 @@ export const fromEntity = (entity: UserVouch, options: FromEntityOptions = {}): 
 
     const { hideDiscriminator } = options;
     const recipientDto = recipient && userDtoFromEntity(recipient, { hideDiscriminator });
-    // const referenceDto = reference instanceof Service && serviceDtoFromEntity(reference, { hideDiscriminator });
-    const referenceTypeString = reference instanceof Service ? 'Service' : 'ItemListing';
-    const referenceDto = reference instanceof Service && serviceDtoFromEntity(reference, { hideDiscriminator: false });
+    const authorDto = author && userDtoFromEntity(author, { hideDiscriminator });
+    const referenceDto = serviceDtoFromEntity(reference, { hideDiscriminator: false });
 
     return {
         id: uuid,
         recipient: recipientDto,
-        recipientId: recipientDto.id,
+        recipientId: recipientDto?.id,
+        author: authorDto,
+        authorId: authorDto ? authorDto.id : author?.uuid,
         reference: referenceDto,
-        referenceId: referenceDto ? referenceDto.id : String(reference.id),
-        referenceType: referenceTypeString,
+        referenceId: referenceDto ? referenceDto.id : reference?.uuid,
+        referenceType,
         description,
         rating,
         state,
