@@ -14,7 +14,7 @@ export const fromEntity = (entity: User, options: FromEntityOptions = {}): API.U
     const { discordName, battleNetTag, vouchCalculation, uuid } = entity;
     const vouchScore = vouchCalculation?.score || 0;
     const vouchRating = vouchCalculation?.rating || 0;
-    console.log("USER ENTITY: " + JSON.stringify(entity))
+    console.log('USER ENTITY: ' + JSON.stringify(entity));
 
     return {
         id: uuid,

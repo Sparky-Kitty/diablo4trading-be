@@ -2,15 +2,15 @@ import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { API } from '@sanctuaryteam/shared';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { RequestModel } from 'src/auth/request.model';
 import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
 import { Service } from 'src/services/services.entity';
+import { ServicesService } from 'src/services/services.service';
 import { Repository } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
-import { RequestModel } from 'src/auth/request.model';
 import { fromEntity as userNotificationFromEntity, UserNotificationDto } from './user-notification.dto';
 import { UserNotificationService } from './user-notification.service';
-import { ServicesService } from 'src/services/services.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users/notifications')
@@ -42,9 +42,9 @@ export class UserNotificationController {
             .createQuery()
             .getVouchesByUserUuid(this.userVouchRepository, this.serviceRepository, this.serviceSlotRepository, uuid)
             .then(userVouches =>
-                userVouches.map(vouch => 
+                userVouches.map(vouch =>
                     userNotificationFromEntity(vouch.userVouch, req.user, { hideDiscriminator: false }, vouch.reference)
-                ),
+                )
             );
 
         const [serviceSlots, userVouches] = await Promise.all([serviceSlotsPromise, userVouchesPromise]);

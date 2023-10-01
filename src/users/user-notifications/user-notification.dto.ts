@@ -1,13 +1,13 @@
 import { API } from '@sanctuaryteam/shared';
 import { ItemListingBid } from 'src/item-listings/item-listing-bids/item-listing-bid.entity';
-import { ServiceSlot } from './../../services/service-slots/service-slots.entity';
+import { ItemListing } from 'src/item-listings/item-listing.entity';
 import { Service } from 'src/services/services.entity';
 import { fromEntity as serviceSlotDtoFromEntity } from './../../services/service-slots/service-slots.dto';
+import { ServiceSlot } from './../../services/service-slots/service-slots.entity';
 import { fromEntity as userVouchFromEntity, UserVouchDto } from './../user-vouch/user-vouch-dto';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { fromEntity as userDtoFromEntity } from './../user.dto';
 import { User } from '../users.entity';
-import { ItemListing } from 'src/item-listings/item-listing.entity';
 
 export interface UserNotificationDto {
     id: string;
@@ -24,7 +24,13 @@ interface FromEntityOptions {
     hideDiscriminator?: boolean;
 }
 
-const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid, notification: UserNotificationDto, options: FromEntityOptions = {}, client?: User, vouchReference?: Service | ItemListing): UserNotificationDto => {   
+const referenceNotification = (
+    entity: ServiceSlot | UserVouch | ItemListingBid,
+    notification: UserNotificationDto,
+    options: FromEntityOptions = {},
+    client?: User,
+    vouchReference?: Service | ItemListing,
+): UserNotificationDto => {
     const { hideDiscriminator } = options;
 
     // ServiceSlot Related Notifications
@@ -51,9 +57,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
                 break;
         }
         return notification;
-    }
-
-    // UserVouch Related Notifications
+    } // UserVouch Related Notifications
     else if (entity instanceof UserVouch) {
         notification.referenceType = 'UserVouch';
         notification.id = entity.uuid;
@@ -66,13 +70,14 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
             default: // Default Open (0)
                 if (reference instanceof Service) {
                     if (recipient.uuid == notification.recipient.id) {
-                        if (notification.recipient.discordName == recipient.discordName && recipient.id == reference.userId) {
+                        if (
+                            notification.recipient.discordName == recipient.discordName
+                            && recipient.id == reference.userId
+                        ) {
                             notification.message = `Please rate the client.`;
                         } else {
                             notification.message = `Please rate the service.`;
-
                         }
-                        
                     }
                 } else {
                     if (recipient.id == reference.sellerId) {
@@ -85,7 +90,7 @@ const referenceNotification = (entity: ServiceSlot | UserVouch | ItemListingBid,
         }
         return notification;
     }
-}
+};
 
 export const fromEntity = (
     entity: UserVouch | ServiceSlot | ItemListingBid,
@@ -100,7 +105,10 @@ export const fromEntity = (
     const {} = entity instanceof UserVouch && entity;
 
     const user = recipient && userDtoFromEntity(recipient);
-    const referenceEntity = ((entity instanceof UserVouch && reference instanceof Service) && userVouchFromEntity(entity, reference, { hideDiscriminator: false })) || entity instanceof ServiceSlot && serviceSlotDtoFromEntity(entity, { hideDiscriminator: entity.state === API.ServiceSlotStates.Pending });
+    const referenceEntity = ((entity instanceof UserVouch && reference instanceof Service)
+        && userVouchFromEntity(entity, reference, { hideDiscriminator: false }))
+        || entity instanceof ServiceSlot
+            && serviceSlotDtoFromEntity(entity, { hideDiscriminator: entity.state === API.ServiceSlotStates.Pending });
 
     let notification: UserNotificationDto = {
         id: '',
@@ -108,7 +116,7 @@ export const fromEntity = (
         recipientId: recipient.uuid,
         reference: referenceEntity,
         referenceId: referenceEntity.id,
-        referenceType:  'unknown',
+        referenceType: 'unknown',
         message: 'null',
         createdAt: new Date(),
     };
@@ -133,13 +141,13 @@ export const fromEntity = (
             // Handle the case where referenceNotification returns null.
             // You can return a default value or take appropriate action.
             // console.log("Info: " + JSON.stringify(fullNotification));
-            console.error("Reference notification is null.");
+            console.error('Reference notification is null.');
             // Return a default value or throw an error if necessary.
         }
     } catch (error) {
         // Handle any errors that might occur during the referenceNotification call.
         // You can log the error or take appropriate action as needed.
-        console.error("Error while creating full notification:", error);
+        console.error('Error while creating full notification:', error);
         // Throw the error if necessary.
     }
 };

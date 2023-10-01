@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { API } from '@sanctuaryteam/shared';
 import { ItemListingBid } from 'src/item-listings/item-listing-bids/item-listing-bid.entity';
 import { ItemListing } from 'src/item-listings/item-listing.entity';
 import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
@@ -8,7 +9,6 @@ import { ServicesService } from 'src/services/services.service';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { UserVouch } from '../user-vouch/user-vouch.entity';
 import { User } from '../users.entity';
-import { API } from '@sanctuaryteam/shared';
 
 @Injectable()
 export class UserNotificationService {
@@ -57,7 +57,10 @@ class CustomQueryBuilder<T> {
             .leftJoinAndSelect('service_slot.serviceOwner', 'serviceOwner')
             .leftJoinAndSelect('service_slot.service', 'service')
             .where('client.uuid = :userUuid OR serviceOwner.uuid = :userUuid', { userUuid })
-            .andWhere('service_slot.state != :ended AND service_slot.state != :rejected', { rejected: API.ServiceSlotStates.Rejected, ended: API.ServiceSlotStates.Ended });
+            .andWhere('service_slot.state != :ended AND service_slot.state != :rejected', {
+                rejected: API.ServiceSlotStates.Rejected,
+                ended: API.ServiceSlotStates.Ended,
+            });
 
         const customQueryBuilder = new CustomQueryBuilder<ServiceSlot>(serviceSlotQueryBuilder, serviceSlotRepository);
 
@@ -69,8 +72,8 @@ class CustomQueryBuilder<T> {
         serviceRepository: Repository<Service>,
         serviceSlotRepository: Repository<ServiceSlot>,
         userUuid?: string,
-    ): Promise<{userVouch: UserVouch, reference: Service | ItemListing}[]> {
-        let vouchList: {userVouch: UserVouch, reference: Service | ItemListing}[] = [];
+    ): Promise<{ userVouch: UserVouch; reference: Service | ItemListing }[]> {
+        let vouchList: { userVouch: UserVouch; reference: Service | ItemListing }[] = [];
 
         // Fetch UserVouch records
         const userVouches = await userVouchRepository.createQueryBuilder('user_vouch')
@@ -79,34 +82,34 @@ class CustomQueryBuilder<T> {
             .where('recipient.uuid = :userUuid', { userUuid })
             .getMany();
 
-            for (const userVouch of userVouches) {
-                let reference: ItemListing | Service;
-        
-                if (userVouch.referenceType === 'ItemListing') {
-                    const itemListing = await this.itemListingRepository.findOneBy({ id: userVouch.referenceId });
-                    reference = itemListing;
-                } else if (userVouch.referenceType === 'Service') {
-                    const service = await serviceRepository.findOneBy({ id: userVouch.referenceId });
-                    const slots = await serviceSlotRepository.find({
-                        where: [
-                            { serviceOwnerUserId: userVouch.recipientId, serviceId: service.id },
-                            { clientUserId: userVouch.recipientId, serviceId: service.id }
-                        ]
-                    });
-        
-                    if (slots && slots.length > 0) {
-                        reference = service;
-                    }
-                }
-        
-                if (reference) {
-                    vouchList.push({ userVouch, reference });
+        for (const userVouch of userVouches) {
+            let reference: ItemListing | Service;
+
+            if (userVouch.referenceType === 'ItemListing') {
+                const itemListing = await this.itemListingRepository.findOneBy({ id: userVouch.referenceId });
+                reference = itemListing;
+            } else if (userVouch.referenceType === 'Service') {
+                const service = await serviceRepository.findOneBy({ id: userVouch.referenceId });
+                const slots = await serviceSlotRepository.find({
+                    where: [
+                        { serviceOwnerUserId: userVouch.recipientId, serviceId: service.id },
+                        { clientUserId: userVouch.recipientId, serviceId: service.id },
+                    ],
+                });
+
+                if (slots && slots.length > 0) {
+                    reference = service;
                 }
             }
-        
+
+            if (reference) {
+                vouchList.push({ userVouch, reference });
+            }
+        }
+
         return vouchList;
     }
-        
+
     // Usage example for bids
     async getBidsByUserUuid(itemListingBidRepository: Repository<ItemListingBid>, userUuid?: string) {
         const itemListingBidQueryBuilder = itemListingBidRepository.createQueryBuilder('item_listing_bid')

@@ -1,8 +1,8 @@
-import { fromEntity, UserNotificationDto } from './user-notification.dto';
-import { User } from '../users.entity';
-import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
 import { API } from '@sanctuaryteam/shared';
 import { fromEntity as serviceSlotDtoFromEntity } from 'src/services/service-slots/service-slots.dto';
+import { ServiceSlot } from 'src/services/service-slots/service-slots.entity';
+import { User } from '../users.entity';
+import { fromEntity, UserNotificationDto } from './user-notification.dto';
 
 describe('User Notifications', () => {
     const user = new User();
@@ -12,7 +12,7 @@ describe('User Notifications', () => {
     user.discordId = '395248731257044992';
     user.discordName = 'sparkyonyx';
     user.email = 'dennis@digitalflavors.net';
-    user.uuid = '871f2e77-28cb-4e00-b6e4-7bece27ff04b'
+    user.uuid = '871f2e77-28cb-4e00-b6e4-7bece27ff04b';
     let serviceSlot: ServiceSlot;
 
     beforeEach(() => {
@@ -28,7 +28,9 @@ describe('User Notifications', () => {
     describe('fromEntity', () => {
         it('should return a UserNotificationDto object', () => {
             const result: UserNotificationDto = fromEntity(serviceSlot, user, { hideDiscriminator: false });
-            const referenceCheck: API.ServiceSlotDto = serviceSlotDtoFromEntity(serviceSlot, { hideDiscriminator: false })
+            const referenceCheck: API.ServiceSlotDto = serviceSlotDtoFromEntity(serviceSlot, {
+                hideDiscriminator: false,
+            });
             expect(result).toBeDefined();
             expect(result.id).toEqual(serviceSlot.uuid);
             expect(result.recipientId).toEqual(user.uuid);
