@@ -11,9 +11,9 @@ import { UserVouch } from 'src/users/user-vouch/user-vouch.entity';
 import { UserVouchService } from 'src/users/user-vouch/user-vouch.service';
 import { ServiceSlot } from '../../services/service-slots/service-slots.entity';
 import { Service } from '../../services/services.entity';
+import { UserNotificationService } from './../user-notifications/user-notification.service';
 import { User } from '../users.entity';
 import { UsersService } from '../users.service';
-import { UserNotificationService } from './../user-notifications/user-notification.service';
 import { UserVouchController } from './user-vouch.controller';
 
 @Module({

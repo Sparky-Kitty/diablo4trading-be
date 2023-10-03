@@ -102,7 +102,7 @@ export const fromEntity = (
         client,
     } = entity instanceof ServiceSlot && entity;
 
-    const { } = entity instanceof UserVouch && entity;
+    const {} = entity instanceof UserVouch && entity;
 
     const user = recipient && userDtoFromEntity(recipient);
     const referenceEntity = ((entity instanceof UserVouch && reference instanceof Service)
