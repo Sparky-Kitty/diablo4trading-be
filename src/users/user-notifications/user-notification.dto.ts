@@ -62,17 +62,17 @@ const referenceNotification = (
         notification.referenceType = 'UserVouch';
         notification.id = entity.uuid;
 
-        const recipient = entity.recipient;
+        // const recipient = entity.recipient;
+        const author = entity.author;
         const reference = vouchReference;
         switch (entity.state) {
             case 1:
                 break;
             default: // Default Open (0)
                 if (reference instanceof Service) {
-                    if (recipient.uuid == notification.recipient.id) {
+                    if (author.id == reference.userId) {
                         if (
-                            notification.recipient.discordName == recipient.discordName
-                            && recipient.id == reference.userId
+                            notification.recipientId == author.uuid
                         ) {
                             notification.message = `Please rate the client.`;
                         } else {
@@ -80,7 +80,7 @@ const referenceNotification = (
                         }
                     }
                 } else {
-                    if (recipient.id == reference.sellerId) {
+                    if (author.id == reference.sellerId) {
                         notification.message = `Please rate the client.`;
                     } else {
                         notification.message = `Please rate the item.`;
@@ -102,7 +102,7 @@ export const fromEntity = (
         client,
     } = entity instanceof ServiceSlot && entity;
 
-    const {} = entity instanceof UserVouch && entity;
+    const { } = entity instanceof UserVouch && entity;
 
     const user = recipient && userDtoFromEntity(recipient);
     const referenceEntity = ((entity instanceof UserVouch && reference instanceof Service)

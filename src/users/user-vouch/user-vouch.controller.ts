@@ -11,10 +11,10 @@ import { UserVouchService } from './user-vouch.service';
 export class UserVouchController {
     constructor(private readonly userVouchService: UserVouchService) {}
 
-    @Post('/')
-    async closeVouch(@Body() createVouchDto: CloseUserVouchDto, @Request() req: RequestModel): Promise<UserVouch> {
+    @Post('/close')
+    async closeVouch(@Body() closeVouchDto: CloseUserVouchDto, @Request() req: RequestModel): Promise<UserVouch> {
         const user = req.user;
-        return await this.userVouchService.closeVouch(createVouchDto, user);
+        return await this.userVouchService.closeVouch(closeVouchDto, user);
     }
 
     @Get('/')

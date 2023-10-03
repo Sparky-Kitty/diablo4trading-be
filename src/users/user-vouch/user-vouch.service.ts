@@ -116,7 +116,7 @@ export class UserVouchService {
             throw new BadRequestException('Rating should be between 0 and 10');
         }
 
-        const existingVouch = await this.userVouchRepository.findOne({ where: { id: data.id } });
+        const existingVouch = await this.userVouchRepository.findOne({ where: { uuid: data.id } });
 
         if (!existingVouch) {
             throw new NotFoundException('User Vouch not found');

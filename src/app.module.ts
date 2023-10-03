@@ -10,6 +10,7 @@ import { LoggingMiddleware } from './middleware/request-logging.middleware';
 import { ServiceSlotsModule } from './services/service-slots/service-slots.module';
 import { ServicesModule } from './services/services.module';
 import { UserNotificationModule } from './users/user-notifications/user-notification.module';
+import { UserVouchModule } from './users/user-vouch/user-vouch.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { UserNotificationModule } from './users/user-notifications/user-notifica
         ItemListingsModule,
         ServicesModule,
         ServiceSlotsModule,
+        UserVouchModule,
         UserNotificationModule,
     ],
     controllers: [AppController],

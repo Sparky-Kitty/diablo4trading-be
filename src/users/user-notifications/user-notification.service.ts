@@ -79,7 +79,7 @@ class CustomQueryBuilder<T> {
         const userVouches = await userVouchRepository.createQueryBuilder('user_vouch')
             .leftJoinAndSelect('user_vouch.recipient', 'recipient')
             .leftJoinAndSelect('user_vouch.author', 'author')
-            .where('recipient.uuid = :userUuid', { userUuid })
+            .where('author.uuid = :userUuid', { userUuid })
             .getMany();
 
         for (const userVouch of userVouches) {
@@ -92,8 +92,8 @@ class CustomQueryBuilder<T> {
                 const service = await serviceRepository.findOneBy({ id: userVouch.referenceId });
                 const slots = await serviceSlotRepository.find({
                     where: [
-                        { serviceOwnerUserId: userVouch.recipientId, serviceId: service.id },
-                        { clientUserId: userVouch.recipientId, serviceId: service.id },
+                        { serviceOwnerUserId: userVouch.authorId, serviceId: service.id },
+                        { clientUserId: userVouch.authorId, serviceId: service.id },
                     ],
                 });
 
